@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!--dimensiones boostrap-->
+    <dimen name="bt_btn_radius">6dp</dimen>
+
+    <dimen name="margin_medium">8dp</dimen>
+
+    <dimen name="text_large">20sp</dimen>
+
+    <dimen name="item_small">13sp</dimen>
+    <dimen name="item_medium">18sp</dimen >
+    <dimen name="item_large">21sp</dimen >
+    <dimen name="item_XL">23sp</dimen>
+
+    <dimen name="universal_margin">16dp</dimen>
+    <dimen name="title_margin">6dp</dimen>
+    <dimen name="item_margin">8dp</dimen>
+
+</resources>

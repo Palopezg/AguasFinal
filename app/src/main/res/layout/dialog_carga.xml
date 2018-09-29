@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:paddingHorizontal="?attr/dialogPreferredPadding"
+        android:paddingVertical="?attr/dialogPreferredPadding"
+>
+
+        <TextView
+            android:id="@+id/textView3"
+            style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:paddingBottom="@dimen/universal_margin"
+            android:paddingTop="@dimen/universal_margin"
+            android:text="Ingrese Nueva Carga"></TextView>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignBaseline="@+id/tvDialogMedidor"
+            android:layout_alignBottom="@+id/tvDialogMedidor"
+            android:layout_alignEnd="@+id/etDialogEstAct"
+            android:gravity="center"
+            android:paddingBottom="@dimen/universal_margin"
+            android:paddingTop="@dimen/universal_margin"
+            android:text="Estado Anterior: " />
+
+        <TextView
+            android:id="@+id/tvDialogEstAnt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignBaseline="@+id/textView4"
+            android:layout_alignBottom="@+id/textView4"
+            android:layout_toEndOf="@+id/textView4"
+            android:gravity="center"
+            android:paddingBottom="@dimen/universal_margin"
+            android:paddingTop="@dimen/universal_margin"
+            android:text="55"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etDialogEstAct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_below="@+id/tvDialogEstAnt"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Ingrese nuevo estado"
+            android:inputType="textPersonName|number"
+            android:paddingBottom="@dimen/universal_margin"
+            android:paddingTop="@dimen/universal_margin" />
+
+        <Button
+            android:id="@+id/btnDialogCarga"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etDialogEstAct"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:paddingBottom="?attr/dialogPreferredPadding"
+            android:paddingTop="?attr/dialogPreferredPadding"
+            android:text="Actualizar" />
+
+        <TextView
+            android:id="@+id/tvDialogMedidor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignTop="@+id/textView5"
+            android:layout_toEndOf="@+id/textView5"
+            android:gravity="center"
+            android:paddingBottom="@dimen/universal_margin"
+            android:paddingTop="@dimen/universal_margin"
+            android:text="Medidor"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView3"
+            android:text="Medidor: "
+            android:paddingBottom="@dimen/universal_margin"
+            android:paddingTop="@dimen/universal_margin"/>
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
+

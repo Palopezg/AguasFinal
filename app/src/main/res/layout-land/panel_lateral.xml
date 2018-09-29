@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/borde_item"
+    android:backgroundTint="@color/bt_bg_gris"
+    android:elevation="6dp">
+
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/rlPanelLat"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/borde_item"
+        android:backgroundTint="@color/bt_bg_gris"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/tvObservaciones2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:text="Estado Actual"
+            android:textColor="@color/bt_blue"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/btnPLAceptar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread_inside" />
+
+        <EditText
+            android:id="@+id/etIngresarMedida"
+            android:layout_width="wrap_content"
+            android:layout_height="41dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:background="@android:color/background_light"
+            android:digits="1234567890 "
+            android:ems="10"
+            android:focusedByDefault="false"
+            android:hint="Ingrese la nueva medida"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:maxLength="7"
+            android:singleLine="true"
+            android:textColor="@color/bt_blue"
+            app:layout_constraintBottom_toTopOf="@+id/btnPLAceptar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.05"
+            app:layout_constraintStart_toEndOf="@+id/tvObservaciones2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnPLAceptar"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="51dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/borde_item"
+            android:backgroundTint="@color/bt_green"
+            android:elevation="5dp"
+            android:text="Aceptar"
+            android:textColor="@color/bt_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

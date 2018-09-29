@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Aguas Ventanas</string>
+
+    <!--Provider y account-->
+    <string name="account_type">com.software.pyc.aguasfinal.account</string>
+    <string name="provider_authority">com.software.pyc.aguasfinal</string>
+
+
+    <!--Pantalla de login-->
+    <string name="btn_login">Login</string>
+
+    <string name="hint_usuario">Usuario</string>
+    <string name="hint_pass">Contraseña</string>
+
+    <string name="msg_login">Ingrese usuario y contraseña</string>
+    <string name="err_login">Usuario y/o contraseña incorrectos</string>
+
+    <!--Menu-->
+    <string name="logout">Logout</string>
+    <string name="action_sync">Bajar tabla</string>
+    <string name="action_sync_local">Subir Actualizaciones</string>
+    <string name="action_settings">Settings</string>
+
+    <!--Pantalla lista-->
+</resources>
