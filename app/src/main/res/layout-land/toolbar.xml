@@ -37,6 +37,7 @@
             android:id="@+id/spRuta"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:paddingLeft="8dp"
@@ -45,6 +46,7 @@
             android:textColor="@color/bt_white"
             android:textSize="20sp"
             android:tooltipText="ruta..."
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,9 +88,11 @@
             android:id="@+id/spOrderBy"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:popupBackground="@color/bt_blue"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/spRuta"
             app:layout_constraintTop_toTopOf="parent" />
 
