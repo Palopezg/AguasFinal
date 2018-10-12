@@ -10,7 +10,7 @@
     <color name="bt_blue">#337ab7</color>
     <color name="bt_red">#d9534f</color>
     <color name="bt_yellow">#f0ad4e</color>
-    <color name="bt_white">#fff</color>
+    <color name="bt_white">#ffffff</color>
     <color name="bt_black">#000000</color>
 
     <color name="borde_item">@color/bt_blue</color>

@@ -19,68 +19,59 @@
             android:id="@+id/tvUser"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginTop="1dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="Usuario"
             android:textAppearance="@style/TextAppearance.Compat.Notification"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_marginStart="128dp"
-            android:layout_marginTop="8dp"
-            android:text="Ruta"
-            android:textAlignment="viewStart"
-            android:textColor="@color/borde_item"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@+id/spRuta"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/btnBusqueda"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Spinner
             android:id="@+id/spRuta"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Spinner
-            android:id="@+id/spBusqueda"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_height="35dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:popupBackground="@color/bt_blue"
+            android:textColor="@color/bt_white"
+            android:textSize="20sp"
+            android:tooltipText="ruta..."
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvUser"
-            app:layout_constraintVertical_bias="0.77" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/etBusqueda2"
             style="?android:attr/editTextStyle"
-            android:layout_width="101dp"
+            android:layout_width="174dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:ems="10"
             android:focusable="auto"
             android:focusedByDefault="false"
             android:hint="Busqueda"
             android:inputType="textPersonName"
-            android:textColor="@color/borde_item"
+            android:textColor="@color/bt_white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/spBusqueda" />
+            app:layout_constraintEnd_toStartOf="@+id/btnBusqueda"
+            app:layout_constraintStart_toEndOf="@+id/spOrderBy"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/btnBusqueda"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="54dp"
+            android:layout_height="35dp"
             android:adjustViewBounds="true"
             android:background="@color/borde_item"
             android:cropToPadding="false"
@@ -88,18 +79,17 @@
             android:tint="@color/bt_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/etBusqueda2"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_menu_search" />
 
         <Spinner
             android:id="@+id/spOrderBy"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="52dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btnBusqueda"
+            android:layout_height="35dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:popupBackground="@color/bt_blue"
+            app:layout_constraintStart_toEndOf="@+id/spRuta"
             app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>

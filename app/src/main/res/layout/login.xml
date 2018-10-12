@@ -25,8 +25,7 @@
             android:padding="@dimen/margin_medium"
             android:text="@string/msg_login"
             android:textColor="@android:color/black"
-            android:textSize="24sp"
-            android:textStyle="italic" />
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/etUser"
@@ -48,7 +47,7 @@
             android:background="@drawable/borde_item_black"
             android:ems="10"
             android:hint="@string/hint_pass"
-            android:inputType="textPersonName"
+            android:inputType="textPassword"
             android:padding="@dimen/margin_medium"
             android:paddingStart="@dimen/margin_medium" />
 

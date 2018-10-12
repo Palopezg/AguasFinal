@@ -36,6 +36,7 @@ public class Constantes {
     public static final String ESTADO_ACT = "estadoActual";
     public static final String FECHA_ACT = "fechaActualizacion";
     public static final String USUARIO = "usuario";
+    public static final String OBSERVACIONES = "observaciones";
 
     public static final String ESTADO = "estado";
     public static final String MENSAJE = "mensaje";

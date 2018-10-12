@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 //      Crea los registro en la base de Usuarios.
-//        helper.mockData();
+       helper.mockData();
 
 //   La clase SessionManager mantiene el registro del ususario una vez apagada la app
         final SessionManager sessionManager = new SessionManager(getApplicationContext());

@@ -17,5 +17,7 @@
     <dimen name="universal_margin">16dp</dimen>
     <dimen name="title_margin">6dp</dimen>
     <dimen name="item_margin">8dp</dimen>
+    <dimen name="item_card_large">48sp</dimen>
+    <dimen name="item_card_medium">36sp</dimen>
 
 </resources>

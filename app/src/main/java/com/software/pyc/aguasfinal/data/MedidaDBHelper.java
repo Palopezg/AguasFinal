@@ -47,6 +47,7 @@ public class MedidaDBHelper extends SQLiteOpenHelper {
                 ContractMedida.Columnas.FECHA_ACT + " TEXT, " +
                 ContractMedida.Columnas.ACTUALIZADO + " TEXT, " +
                 ContractMedida.Columnas.USUARIO + " TEXT, " +
+                ContractMedida.Columnas.OBSERVACIONES + " TEXT, " +
 
                 ContractMedida.Columnas.ID_REMOTA + " TEXT," +
                 ContractMedida.Columnas.ESTADO + " INTEGER NOT NULL DEFAULT "+ ContractMedida.ESTADO_OK+"," +
@@ -153,7 +154,7 @@ public class MedidaDBHelper extends SQLiteOpenHelper {
                 listaMedida.add(new Medida(c.getString(0),c.getString(1),c.getString(2),
                         c.getString(3),c.getString(4),c.getString(5),
                         c.getString(6),c.getString(7),c.getString(8),
-                        c.getString(9),c.getString(10),c.getString(11)));
+                        c.getString(9),c.getString(10),c.getString(11),c.getString(12)));
             } while (c.moveToNext());
         }
 
@@ -161,7 +162,7 @@ public class MedidaDBHelper extends SQLiteOpenHelper {
 
     }
 //MAster
-    public boolean cargaEstado(String id,String estAct, String cargado){
+    public boolean cargaEstado(String id,String estAct, String cargado, String usuario){
 
         Date currentTime = Calendar.getInstance().getTime();
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
@@ -171,7 +172,24 @@ public class MedidaDBHelper extends SQLiteOpenHelper {
         cv.put(ContractMedida.Columnas.PENDIENTE_INSERCION ,"1");
         cv.put(ContractMedida.Columnas.FECHA_INSERCION , String.valueOf(currentTime));
         cv.put(ContractMedida.Columnas.FECHA_ACT , String.valueOf(currentTime));
-        cv.put(ContractMedida.Columnas.USUARIO , "Usuario");
+        cv.put(ContractMedida.Columnas.USUARIO , usuario);
+
+        sqLiteDatabase.update(ContractMedida.MEDIDA, cv,"_id="+id,null);
+        return true;
+    }
+    //MAster
+    public boolean cargaEstado(String id,String estAct, String observaciones, String cargado, String usuario){
+
+        Date currentTime = Calendar.getInstance().getTime();
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(ContractMedida.Columnas.ESTADO_ACT,estAct);
+        cv.put(ContractMedida.Columnas.OBSERVACIONES,observaciones);
+        cv.put(ContractMedida.Columnas.ACTUALIZADO ,cargado);
+        cv.put(ContractMedida.Columnas.PENDIENTE_INSERCION ,"1");
+        cv.put(ContractMedida.Columnas.FECHA_INSERCION , String.valueOf(currentTime));
+        cv.put(ContractMedida.Columnas.FECHA_ACT , String.valueOf(currentTime));
+        cv.put(ContractMedida.Columnas.USUARIO , usuario);
 
         sqLiteDatabase.update(ContractMedida.MEDIDA, cv,"_id="+id,null);
         return true;

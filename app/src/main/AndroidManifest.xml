@@ -19,15 +19,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainActivity">
+        <activity
+            android:name=".ui.MainActivity"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.LoginActivity" />
-        <activity android:name=".ui.ListaActivity" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.ListaActivity"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- SERVICIO DE AUTENTICACIÓN -->
         <service android:name=".sync.AuthenticationService">
@@ -54,11 +63,11 @@
         </service>
 
         <!-- PROVIDER -->
-        <provider android:name=".provider.ProviderMedida"
+        <provider
+            android:name=".provider.ProviderMedida"
             android:authorities="com.software.pyc.aguasfinal"
             android:enabled="true"
-            android:exported="true" >
-        </provider>
+            android:exported="true"></provider>
 
 
     </application>

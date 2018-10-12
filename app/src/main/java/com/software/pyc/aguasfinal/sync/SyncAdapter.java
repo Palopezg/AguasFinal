@@ -66,7 +66,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             ContractMedida.Columnas.ESTADO_ACT,
             ContractMedida.Columnas.FECHA_ACT,
             ContractMedida.Columnas.USUARIO,
-            ContractMedida.Columnas.ID_REMOTA
+            ContractMedida.Columnas.ID_REMOTA,
+            ContractMedida.Columnas.OBSERVACIONES
+
     };
 
 /*    // Indices para las columnas indicadas en la proyección
@@ -268,6 +270,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         v.put(ContractMedida.Columnas.PENDIENTE_INSERCION, "0");
         v.put(ContractMedida.Columnas.ESTADO, ContractMedida.ESTADO_OK);
         v.put(ContractMedida.Columnas.ID_REMOTA, idRemota);
+        v.put(ContractMedida.Columnas.ACTUALIZADO,"SYNC");
 
         resolver.update(uri, v, selection, selectionArgs);
 
@@ -347,7 +350,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         // Encontrar datos obsoletos
         String id;
-        String ruta, orden, codigo, nombre, medidor, partida, estado_act, estado_ant, fecha_act, usuario;
+        String ruta, orden, codigo, nombre, medidor, partida, estado_act, estado_ant, fecha_act, usuario, observaciones;
 
         // Datos de la base local
         while (c.moveToNext()) {
@@ -364,6 +367,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             estado_act = c.getString(Utilidades.COLUMNA_ESTADO_ACT);
             fecha_act = c.getString(Utilidades.COLUMNA_FECHA_ACT);
             usuario = c.getString(Utilidades.COLUMNA_USUARIO);
+            observaciones = c.getString(Utilidades.COLUMNA_OBSERVACIONES);
 
 
 
@@ -388,9 +392,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 boolean b7 = match.estadoActual != null && !match.estadoActual.equals(estado_act);
                 boolean b8 =  match.fechaActualizacion != null && !match.fechaActualizacion.equals(fecha_act);
                 boolean b9 = match.usuario != null && !match.usuario.equals(usuario);
+                boolean b10 = match.observaciones != null && !match.observaciones.equals(observaciones);
 
 
-                if (b || b1 || b2 || b3|| b4 || b5 || b6|| b7 || b8 || b9 ) {
+                if (b || b1 || b2 || b3|| b4 || b5 || b6|| b7 || b8 || b9 || b10) {
 
                     Log.i(TAG, "Programando actualización de: " + existingUri);
 
@@ -406,6 +411,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             .withValue(ContractMedida.Columnas.ESTADO_ACT, match.estadoActual)
                             .withValue(ContractMedida.Columnas.FECHA_ACT, match.fechaActualizacion)
                             .withValue(ContractMedida.Columnas.USUARIO, match.usuario)
+                            .withValue(ContractMedida.Columnas.OBSERVACIONES, match.observaciones)
                             .build());
                     syncResult.stats.numUpdates++;
                 } else {
@@ -437,6 +443,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     .withValue(ContractMedida.Columnas.ESTADO_ACT, e.estadoActual)
                     .withValue(ContractMedida.Columnas.FECHA_ACT, e.fechaActualizacion)
                     .withValue(ContractMedida.Columnas.USUARIO, e.usuario)
+                    .withValue(ContractMedida.Columnas.OBSERVACIONES, e.observaciones)
                     .build());
             syncResult.stats.numInserts++;
         }

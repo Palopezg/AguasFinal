@@ -95,12 +95,39 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         toolbar = findViewById(R.id.toolbarPrincipal);
         setSupportActionBar(toolbar);
 
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        final String usuarioSesion = sessionManager.getUser();
+
+//        TextView usu = findViewById(R.id.tvUser);
+//        TextView usur = findViewById(R.id.menu_usu);
+//        usur.setText(sessionManager.getUser());
+
+
+//      Inicializa los valores del panel lateral
+
+        ConstraintLayout rl_ini =  findViewById(R.id.cl_card_title_pl);
+        TextView ruta_ini = findViewById(R.id.itemRuta_pl);
+        TextView medidor_ini = findViewById(R.id.itemMedidor_pl);
+        TextView nombre_ini = findViewById(R.id.itemNombre_pl);
+        TextView codigo_ini = findViewById(R.id.itemCodigo_pl);
+        TextView partida_ini = findViewById(R.id.itemPartida_pl);
+        TextView orden_ini = findViewById(R.id.itemOrden_pl);
+        TextView estAnt_ini = findViewById(R.id.itemAnt_pl);
+
+        rl_ini.setBackgroundColor(getResources().getColor(R.color.bt_bg_gris));
+        ruta_ini.setText(null);
+        medidor_ini.setText(null);
+        nombre_ini.setText(null);
+        codigo_ini.setText(null);
+        partida_ini.setText(null);
+        orden_ini.setText(null);
+        estAnt_ini.setText(null);
+
 
 
         recyclerView = findViewById(R.id.reciclador);
-        //recyclerView.setHasFixedSize(true);
-
-        recyclerView.setItemViewCacheSize(1000);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(500);
         recyclerView.setDrawingCacheEnabled(true);
 
         layoutManager = new LinearLayoutManager(this);
@@ -117,7 +144,8 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         btnCargaMedida.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText etCargaMedida = findViewById(R.id.etIngresarMedida);
+                EditText etCargaMedida = findViewById(R.id.etIngresarMedida_pl);
+                EditText etObservaciones = findViewById(R.id.etObservaciones);
 
                 if (currentMedida == null) {
                     Toast.makeText(getApplicationContext(), "Seleccione un item...", Toast.LENGTH_SHORT).show();
@@ -126,12 +154,11 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
                         Toast.makeText(getApplicationContext(), "Ingrese un valor nuevo...", Toast.LENGTH_SHORT).show();
 
                     } else {
-                        boolean controlCarga = medidaOpenHelper.cargaEstado(currentMedida.getId(), etCargaMedida.getText().toString(), "TRUE");
+                        boolean controlCarga = medidaOpenHelper.cargaEstado(currentMedida.getId(), etCargaMedida.getText().toString(), etObservaciones.getText().toString(), "TRUE", usuarioSesion);
                         etCargaMedida.setText(null);
                         posicionList = layoutManager.findFirstVisibleItemPosition();
 
                         actualizarDatos();
-
                     }
                 }
             }
@@ -143,7 +170,6 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
                 new RecyclerItemClickListener(this, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
 
-                        ConstraintLayout rl =  findViewById(R.id.rlItem);
 
                         List<Medida> listaMedida = adapter.getLsMedida();
 
@@ -152,7 +178,7 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
 
                         if (viewAnterior != null) {
-                            viewAnterior.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.borde_item));
+                            viewAnterior.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.borde_item_black));
                             viewAnterior.setElevation(0);
                         }
                         viewAnterior = view;
@@ -160,11 +186,43 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
                         view.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.borde_item));
                         view.setElevation(8);
 
-                        EditText panelEstAct = findViewById(R.id.etIngresarMedida);
+                        ConstraintLayout rl_1 = findViewById(R.id.cl_card_title_pl);
+                        TextView ruta_1 = findViewById(R.id.itemRuta_pl);
+                        TextView medidor_1 = findViewById(R.id.itemMedidor_pl);
+                        TextView nombre_1 = findViewById(R.id.itemNombre_pl);
+                        TextView codigo_l = findViewById(R.id.itemCodigo_pl);
+                        TextView partida_l = findViewById(R.id.itemPartida_pl);
+                        TextView orden_l = findViewById(R.id.itemOrden_pl);
+                        TextView estAnt_l = findViewById(R.id.itemAnt_pl);
+                        EditText panelEstAct = findViewById(R.id.etIngresarMedida_pl);
+                        EditText panelObsrevaciones = findViewById(R.id.etObservaciones);
+
+
                         panelEstAct.setText(currentMedida.getEstadoActual());
-
-
+                        panelObsrevaciones.setText(currentMedida.getObservaciones());
+                        ruta_1.setText(currentMedida.getRuta());
+                        medidor_1.setText(currentMedida.getMedidor());
+                        nombre_1.setText(currentMedida.getNombre());
+                        codigo_l.setText(currentMedida.getCodigo());
+                        partida_l.setText(currentMedida.getPartida());
+                        orden_l.setText(currentMedida.getOrden());
+                        estAnt_l.setText(currentMedida.getEstadoAnterior());
+                        rl_1.setBackgroundColor(getResources().getColor(R.color.bt_blue));
+                        if (currentMedida.getActualizado() != null) {
+                            if (currentMedida.getActualizado().equalsIgnoreCase("TRUE")) {
+                                rl_1.setBackgroundColor(getResources().getColor(R.color.bt_yellow));
+                            } else {
+                                if (currentMedida.getActualizado().equalsIgnoreCase("SYNC")) {
+                                    rl_1.setBackgroundColor(getResources().getColor(R.color.bt_green));
+                                }
+                            }
+                        } else {
+                            rl_1.setBackgroundColor(getResources().getColor(R.color.bt_red));
+                        }
                     }
+
+
+
 
                     @Override public void onLongItemClick(View view, int position) {
                         // do whatever
@@ -179,7 +237,7 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
         String[] order_spinner = {"Ordenar por Nombre","Ordenar por Partida","Ordenar por Medidor"};
 
-        spinnerOrderBy.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, order_spinner));
+        spinnerOrderBy.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner_item, order_spinner));
 
         spinnerOrderBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -237,9 +295,9 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
         //Implementacion del spinner ruta
         Spinner spinner = findViewById(R.id.spRuta);
-        String[] ruta_spinner = {"1","2","3","4"};
+        String[] ruta_spinner = {"Ruta 1","Ruta 2","Ruta 3","Ruta 4"};
 
-        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ruta_spinner));
+        spinner.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner_item, ruta_spinner));
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -247,7 +305,23 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id)
 
             {
-                rutaSeleccionada = ContractMedida.Columnas.RUTA+"="+String.valueOf(adapterView.getItemAtPosition(pos));
+                String ordenSel = String.valueOf(adapterView.getItemAtPosition(pos));
+                switch (ordenSel){
+                    case "Ruta 1":
+                        ordenSel="1";
+                        break;
+                    case "Ruta 2":
+                        ordenSel="2";
+                        break;
+                    case "Ruta 3":
+                        ordenSel="3";
+                        break;
+                    case "Ruta 4":
+                        ordenSel="4";
+                        break;
+                }
+
+                rutaSeleccionada = ContractMedida.Columnas.RUTA+"="+String.valueOf(ordenSel);
 
                 consulta.setRuta(rutaSeleccionada);
                 actualizarDatos();
@@ -261,42 +335,9 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
         //Implementacion del spinner busqueda
         ImageButton btnBusqueda = findViewById(R.id.btnBusqueda);
-        Spinner spinnerBusqueda =  findViewById(R.id.spBusqueda);
         final EditText etbusqueda = findViewById(R.id.etBusqueda2);
 
         String[] busqueda_spinner = {"Nombre","Partida","Medidor"};
-
-        spinnerBusqueda.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, busqueda_spinner));
-
-        spinnerBusqueda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id)
-
-            {
-
-                String busquedaSeleccionada = String.valueOf(adapterView.getItemAtPosition(pos));
-
-                switch (busquedaSeleccionada){
-                    case "Nombre":
-                        busquedaSeleccionada = ContractMedida.Columnas.NOMBRE;
-                        break;
-                    case "Partida":
-                        busquedaSeleccionada = ContractMedida.Columnas.PARTIDA;
-                        break;
-                    case "Medidor":
-                        busquedaSeleccionada = ContractMedida.Columnas.MEDIDOR;
-                        break;
-                }
-
-                opcionBusquedaAux=busquedaSeleccionada;
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {    }
-        });
 
 
         btnBusqueda.setOnClickListener(new View.OnClickListener() {
@@ -304,7 +345,13 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
             public void onClick(View v) {
                 String busquedaValor = etbusqueda.getText().toString();
 
-                opcionBusqueda=opcionBusquedaAux+" like '%"+busquedaValor+"%'";
+
+                opcionBusqueda= ContractMedida.Columnas.NOMBRE+" like '%"+busquedaValor+"%' or "
+                              +ContractMedida.Columnas.PARTIDA+" like '%"+busquedaValor+"%' or "
+                              +ContractMedida.Columnas.MEDIDOR+" like '%"+busquedaValor+"%'";
+
+//                opcionBusqueda=opcionBusquedaAux+" like '%"+busquedaValor+"%'";
+                Log.i(TAG, opcionBusqueda);
                 consulta.addWhereAnd(opcionBusqueda);
                 consulta.setOffset(1);
 
@@ -432,12 +479,6 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         adapter.swapCursor(null);
         actualizarDatos();
     }
-
-    /**
-     * Función para comprobar si hay conexión a Internet
-     * @param context
-     * @return boolean
-     */
 
     public static boolean compruebaConexion(Context context) {
 

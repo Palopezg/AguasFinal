@@ -101,7 +101,7 @@ public class CargaMedida extends DialogFragment  {
                         String carga="TRUE";
 
 
-                        View viewItemMedida = inflater.inflate(R.layout.item_lista,null);
+                        View viewItemMedida = inflater.inflate(R.layout.card_item,null);
                         String valorEstadoActual = String.valueOf(estadoActual.getText());
 
 
@@ -111,7 +111,7 @@ public class CargaMedida extends DialogFragment  {
                         if (estadoActual.getText().toString().equalsIgnoreCase("0")){
                             carga="FALSE";
                         }
-                        boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(),carga);
+                        boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(),null,carga,null);
 
 
                         Toast.makeText(getActivity(),"Valor nuevo: "+ valorEstadoActual,Toast.LENGTH_SHORT ).show();

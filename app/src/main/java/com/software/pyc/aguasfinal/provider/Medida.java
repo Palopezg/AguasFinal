@@ -8,6 +8,7 @@ import android.content.ContentValues;
  */
 
 public class Medida {
+    private final String observaciones;
     private String id, ruta, orden, codigo, medidor, estadoAnterior, estadoActual;
     private String usuario;
     private String nombre, partida;
@@ -94,6 +95,10 @@ public class Medida {
         this.partida = partida;
     }
 
+    public String getObservaciones() {
+        return observaciones;
+    }
+
     public String getFechaActualizacion() {
         return fechaActualizacion;
     }
@@ -110,7 +115,7 @@ public class Medida {
         this.actualizado = actualizado;
     }
 
-    public Medida(String id, String ruta, String orden, String codigo, String nombre, String medidor,  String partida,  String estadoAnterior, String estadoActual,  String fechaActualizacion, String actualizado, String usuario) {
+    public Medida(String id, String ruta, String orden, String codigo, String nombre, String medidor,  String partida,  String estadoAnterior, String estadoActual, String fechaActualizacion, String actualizado, String usuario, String observaciones) {
         this.id = id;
         this.ruta = ruta;
         this.orden = orden;
@@ -121,6 +126,7 @@ public class Medida {
         this.usuario = usuario;
         this.nombre = nombre;
         this.partida = partida;
+        this.observaciones = observaciones;
         this.fechaActualizacion = fechaActualizacion;
         this.actualizado = actualizado;
     }
@@ -141,6 +147,7 @@ public class Medida {
         values.put(ContractMedida.Columnas.ESTADO_ACT,estadoActual );
         values.put(ContractMedida.Columnas.FECHA_ACT,fechaActualizacion );
         values.put(ContractMedida.Columnas.ACTUALIZADO,actualizado );
+        values.put(ContractMedida.Columnas.OBSERVACIONES,observaciones );
         values.put(ContractMedida.Columnas.USUARIO,usuario );
 
         return values;

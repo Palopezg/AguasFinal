@@ -23,30 +23,115 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cl_card_title_pl"
+            android:layout_width="match_parent"
+            android:layout_height="69dp"
+            android:background="@color/bt_blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/itemRuta_pl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="1"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textColor="@color/bt_white"
+                android:textSize="@dimen/item_card_medium"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/itemNombre_pl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:autoSizeTextType="uniform"
+                android:ems="7"
+                android:lines="2"
+                android:maxHeight="90dp"
+                android:maxLines="2"
+                android:text="Mansilla Erbert Fabian Y Piccininn Maria"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textColor="@color/bt_white"
+                android:textSize="@dimen/item_medium"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/itemRuta_pl"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.060000002" />
+
+            <TextView
+                android:id="@+id/itemMedidor_pl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="8dp"
+                android:autoSizeTextType="uniform"
+                android:ems="7"
+                android:lines="1"
+                android:maxLines="1"
+                android:text="20105205173"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textColor="@color/bt_white"
+                android:textSize="@dimen/item_large"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/textView6_pl"
+                app:layout_constraintStart_toStartOf="@+id/textView6_pl"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView6_pl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Medidor"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/item_small"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/itemMedidor_pl" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="297dp" />
+
+        </android.support.constraint.ConstraintLayout>
+
         <TextView
-            android:id="@+id/tvObservaciones2"
+            android:id="@+id/tvEstadoActual_pl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
             android:text="Estado Actual"
             android:textColor="@color/bt_blue"
-            android:textSize="30sp"
+            android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/btnPLAceptar"
+            app:layout_constraintBottom_toTopOf="@+id/tvObservaciones"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="spread_inside" />
+            app:layout_constraintTop_toBottomOf="@+id/textView9_pl" />
 
         <EditText
-            android:id="@+id/etIngresarMedida"
+            android:id="@+id/etIngresarMedida_pl"
             android:layout_width="wrap_content"
-            android:layout_height="41dp"
-            android:layout_marginBottom="32dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
             android:background="@android:color/background_light"
             android:digits="1234567890 "
             android:ems="10"
@@ -57,28 +142,165 @@
             android:maxLength="7"
             android:singleLine="true"
             android:textColor="@color/bt_blue"
-            app:layout_constraintBottom_toTopOf="@+id/btnPLAceptar"
+            app:layout_constraintBottom_toBottomOf="@+id/tvEstadoActual_pl"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintStart_toEndOf="@+id/tvObservaciones2"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.029"
+            app:layout_constraintStart_toEndOf="@+id/tvEstadoActual_pl"
+            app:layout_constraintTop_toTopOf="@+id/tvEstadoActual_pl" />
+
+        <TextView
+            android:id="@+id/itemAnt_pl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:text="Estado Anterior"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/item_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl_card_title_pl" />
+
+        <TextView
+            android:id="@+id/itemPartida_pl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="7dp"
+            android:text="Partida"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/item_large"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/itemCodigo_pl"
+            app:layout_constraintTop_toBottomOf="@+id/cl_card_title_pl" />
+
+        <TextView
+            android:id="@+id/itemCodigo_pl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="8dp"
+            android:text="Código"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/item_medium"
+            app:layout_constraintStart_toEndOf="@+id/textView10_pl"
+            app:layout_constraintTop_toBottomOf="@+id/cl_card_title_pl" />
+
+        <TextView
+            android:id="@+id/itemOrden_pl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="8dp"
+            android:text="Orden"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/item_medium"
+            app:layout_constraintStart_toEndOf="@+id/textView8_pl"
+            app:layout_constraintTop_toBottomOf="@+id/cl_card_title_pl" />
+
+        <TextView
+            android:id="@+id/textView8_pl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estado Anterior"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/item_small"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/itemAnt_pl"
+            app:layout_constraintTop_toBottomOf="@+id/itemAnt_pl" />
+
+        <TextView
+            android:id="@+id/textView9_pl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Codigo"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/item_small"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/itemCodigo_pl"
+            app:layout_constraintTop_toBottomOf="@+id/itemCodigo_pl" />
+
+        <TextView
+            android:id="@+id/textView10_pl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Orden"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/item_small"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/itemOrden_pl"
+            app:layout_constraintTop_toBottomOf="@+id/itemOrden_pl" />
+
+        <TextView
+            android:id="@+id/textView2_pl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Partida"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/item_small"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="@+id/textView9_pl"
+            app:layout_constraintStart_toStartOf="@+id/itemPartida_pl"
+            app:layout_constraintTop_toBottomOf="@+id/itemPartida_pl" />
+
 
         <Button
             android:id="@+id/btnPLAceptar"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="51dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/borde_item"
             android:backgroundTint="@color/bt_green"
             android:elevation="5dp"
             android:text="Aceptar"
             android:textColor="@color/bt_white"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etObservaciones" />
+
+        <TextView
+            android:id="@+id/tvObservaciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:text="Observaciones"
+            android:textColor="@color/bt_blue"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/etObservaciones"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvEstadoActual_pl" />
+
+        <EditText
+            android:id="@+id/etObservaciones"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/background_light"
+            android:ems="99"
+            android:gravity="top|left"
+            android:hint="Observaciones..."
+            android:inputType="textImeMultiLine|textPersonName"
+            android:lines="3"
+            android:minLines="3"
+            android:singleLine="false"
+            app:layout_constraintBottom_toTopOf="@+id/btnPLAceptar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvObservaciones" />
+
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

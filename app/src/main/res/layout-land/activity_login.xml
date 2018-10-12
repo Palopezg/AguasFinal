@@ -9,14 +9,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="67dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="717dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="32dp"
             android:layout_weight="0.5"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            app:srcCompat="@drawable/ic_logopyceseste2" />
 
         <include
             android:id="@+id/login"

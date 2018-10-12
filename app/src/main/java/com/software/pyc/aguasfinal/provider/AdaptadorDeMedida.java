@@ -4,6 +4,7 @@ package com.software.pyc.aguasfinal.provider;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.software.pyc.aguasfinal.R;
+import com.software.pyc.aguasfinal.sync.SyncAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.ExpenseViewHolder> {
 
-
+    private static final String TAG = SyncAdapter.class.getSimpleName();
         private Cursor cursor;
         private Context context;
         public List<Medida> lsMedida;
@@ -35,7 +37,7 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             public TextView estAnt;
             public TextView estAct;
             public TextView actualizado;
-            public ImageView estado;
+            public TextView estado;
             public View statusIndicator;
 
             public ExpenseViewHolder(View v) {
@@ -51,8 +53,8 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
                  partida = itemView.findViewById(R.id.itemPartida);
                  estAnt  = itemView.findViewById(R.id.itemAnt);
                  estAct  = itemView.findViewById(R.id.itemAct);
-                 //estado = itemView.findViewById(R.id.imgEstado);
-                statusIndicator = itemView.findViewById(R.id.indicator_appointment_status);
+                 estado = itemView.findViewById(R.id.tvActualizado);
+                statusIndicator = itemView.findViewById(R.id.cl_card_title);
 
             }
         }
@@ -72,7 +74,7 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
         @Override
         public ExpenseViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View v = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.item_lista, viewGroup, false);
+                    .inflate(R.layout.card_item, viewGroup, false);
             return new ExpenseViewHolder(v);
         }
 
@@ -102,7 +104,7 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             estAnt = cursor.getString(7);
             estAct = cursor.getString(8);
             actualizado = cursor.getString(10);
-            estado = cursor.getString(13);
+            estado = cursor.getString(14);
 
             viewHolder.ruta.setText(ruta);
             viewHolder.orden.setText(orden);
@@ -112,21 +114,21 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             viewHolder.partida.setText(partida);
             viewHolder.estAnt.setText(estAnt);
             viewHolder.estAct.setText(estAct);
+            viewHolder.estado.setText(actualizado);
 
             String p = viewHolder.ruta.getText().toString();
+            Log.i(TAG, "estado: "+estado+"   actualizado: "+actualizado);
 
              if (actualizado != null) {
-
-
-/*                 if (estado.equalsIgnoreCase("1")) {
-                     statusIndicator.setBackgroundResource(R.color.status_1);
-
-                 }*/
                  if (actualizado.equalsIgnoreCase("TRUE")) {
-                     viewHolder.statusIndicator.setBackgroundResource(R.color.bt_green);
-                 }else{
-                     viewHolder.statusIndicator.setBackgroundResource(R.color.bt_bg_gris);
+                     viewHolder.statusIndicator.setBackgroundResource(R.color.bt_yellow);
+                 }else {
+                     if (actualizado.equalsIgnoreCase("SYNC")) {
+                         viewHolder.statusIndicator.setBackgroundResource(R.color.bt_green);
+                     }
                  }
+             }else{
+                 viewHolder.statusIndicator.setBackgroundResource(R.color.bt_red);
              }
 
 
@@ -147,7 +149,7 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
                     listaMedida.add(new Medida(c.getString(0),c.getString(1),c.getString(2),
                             c.getString(3),c.getString(4),c.getString(5),
                             c.getString(6),c.getString(7),c.getString(8),
-                            c.getString(9),c.getString(10),c.getString(11)));
+                            c.getString(9),c.getString(10),c.getString(11),c.getString(12)));
                 } while (c.moveToNext());
             }
 
