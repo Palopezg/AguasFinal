@@ -59,10 +59,18 @@ public class MedidaDBHelper extends SQLiteOpenHelper {
     // Sobrescribe la base cada vez que actualiza, es decir se cargan todos los registros de nuevo.
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try { db.execSQL("drop table " + ContractMedida.MEDIDA); }
-        catch (SQLiteException e) { }
+//        try { db.execSQL("drop table " + ContractMedida.MEDIDA); }
+//        catch (SQLiteException e) { }
+        //dropTable(db);
         onCreate(db);
     }
+
+    public void dropTable() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try { db.execSQL("delete from " + ContractMedida.MEDIDA); }
+        catch (SQLiteException e) { }
+    }
+
 
     public void onDelete(){
         SQLiteDatabase db = this.getWritableDatabase();

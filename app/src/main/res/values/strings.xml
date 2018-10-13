@@ -17,6 +17,7 @@
 
     <!--Menu-->
     <string name="logout">Logout</string>
+    <string name="dropTable">Borrar Tabla</string>
     <string name="action_sync">Bajar tabla</string>
     <string name="action_sync_local">Subir Actualizaciones</string>
     <string name="action_settings">Settings</string>

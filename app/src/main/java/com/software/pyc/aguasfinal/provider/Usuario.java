@@ -7,10 +7,20 @@ package com.software.pyc.aguasfinal.provider;
 public class Usuario {
     String nombre;
     String pass;
+    String perfil;
 
-    public Usuario(String nombre, String pass) {
+    public Usuario(String nombre, String pass, String perfil) {
         this.nombre = nombre;
         this.pass = pass;
+        this.perfil = perfil;
+    }
+
+    public String getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(String perfil) {
+        this.perfil = perfil;
     }
 
     public String getNombre() {

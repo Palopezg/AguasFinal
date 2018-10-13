@@ -13,6 +13,9 @@ import android.widget.Toast;
 import com.software.pyc.aguasfinal.R;
 import com.software.pyc.aguasfinal.provider.SessionManager;
 import com.software.pyc.aguasfinal.data.User_OpenHelper;
+import com.software.pyc.aguasfinal.provider.Usuario;
+
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -48,9 +51,11 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     Cursor cursor = helper.ConsultarUsuPass(String.valueOf(nombre.getText()),String.valueOf(password.getText()));
 
+                    List<Usuario> usu = helper.getListaUsuarios(cursor);
+                    String perfil = usu.get(0).getPerfil();
 //                  User y Pass OK
                     if (cursor.getCount() > 0){
-                        sessionManager.createLoginSession(String.valueOf(nombre.getText()));
+                        sessionManager.createLoginSession(String.valueOf(nombre.getText()), perfil);
                         Intent i = new Intent(getApplicationContext(),ListaActivity.class);
                         startActivity(i);
 

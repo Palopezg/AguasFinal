@@ -26,6 +26,7 @@ public class SessionManager {
     private static final String IS_LOGIN = "IsLoggedIn";
     public static final String KEY_NAME = "Name";
     public static final String KEY_EMAIL = "Email";
+    public static final String KEY_PERFIL = "perfil";
 
 
     public SessionManager(Context context){
@@ -35,9 +36,11 @@ public class SessionManager {
     }
 
 
-    public void createLoginSession(String Name){
+    public void createLoginSession(String Name, String perfil){
         editor.putBoolean(IS_LOGIN, true);
         editor.putString(KEY_NAME, Name);
+        editor.putString(KEY_PERFIL, perfil);
+
 
         editor.commit();
     }
@@ -57,10 +60,14 @@ public class SessionManager {
         return pref.getString(KEY_NAME, null);
    }
 
+
+    public String getPerfil(){
+        return pref.getString(KEY_PERFIL, null);
+    }
     public HashMap<String, String> getUserDetails(){
         HashMap<String, String> user = new HashMap<String, String>();
         user.put(KEY_NAME, pref.getString(KEY_NAME, null));
-        user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
+        user.put(KEY_PERFIL, pref.getString(KEY_PERFIL, null));
         return user;
     }
 

@@ -25,7 +25,7 @@ public class User_OpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query="create table usuarios(_ID integer primary key autoincrement, Nombre text, Password text)";
+        String query="create table usuarios(_ID integer primary key autoincrement, Nombre text, Password text, Perfil text)";
         db.execSQL(query);
 
 
@@ -39,17 +39,19 @@ public class User_OpenHelper extends SQLiteOpenHelper {
 
     public void mockData(){
 
-        this.insertarRegistro(1,"pablo","1234");
-        this.insertarRegistro(2,"vero","1234");
-        this.insertarRegistro(3,"crii","1234");
+        this.insertarRegistro(1,"pablo","1234","oper");
+        this.insertarRegistro(2,"vero","1234","oper");
+        this.insertarRegistro(3,"crii","1234","oper");
+        this.insertarRegistro(4,"admin","admin","admin");
     }
 
     // Metodo que permite insertar registros en la tabla usuarios
-    public void insertarRegistro(Integer id, String nombre, String pass){
+    public void insertarRegistro(Integer id, String nombre, String pass, String perfil){
         ContentValues valores = new ContentValues();
         valores.put("_ID", id);
         valores.put("Nombre", nombre);
         valores.put("Password", pass);
+        valores.put("Perfil", perfil);
         this.getWritableDatabase().insert("usuarios",null,valores);
     }
 
@@ -57,7 +59,7 @@ public class User_OpenHelper extends SQLiteOpenHelper {
     public Cursor ConsultarUsuPass(String usu, String pass) throws SQLException{
       Cursor mcursor = null;
       mcursor =  this.getReadableDatabase().query(
-              "usuarios",new String[]{"_ID, Nombre, Password"},
+              "usuarios",new String[]{"_ID, Nombre, Password, Perfil"},
               "Nombre like '"+usu+"' and Password like '"+pass+"'",
               null,
               null,
@@ -68,6 +70,8 @@ public class User_OpenHelper extends SQLiteOpenHelper {
 
       return mcursor;
     };
+
+
 
     // Metodo que permite mostrar todos los usuaios
     public Cursor ConsultarUsuTodos() throws SQLException{
@@ -92,7 +96,7 @@ public class User_OpenHelper extends SQLiteOpenHelper {
 
         if (c.moveToFirst()) {
             do {
-                listaUsuarios.add(new Usuario(c.getString(1),c.getString(0)));
+                listaUsuarios.add(new Usuario(c.getString(1),c.getString(0),c.getString(2)));
             } while (c.moveToNext());
         }
 

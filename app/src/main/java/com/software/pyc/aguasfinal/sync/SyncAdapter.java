@@ -343,7 +343,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         // Consultar registros remotos actuales
         Uri uri = ContractMedida.CONTENT_URI;
         String select = ContractMedida.Columnas.ID_REMOTA + " IS NOT NULL";
-        Cursor c = resolver.query(uri, PROJECTION, select, null, null);
+        Cursor c = resolver.query(uri, PROJECTION, null, null, null);
         assert c != null;
 
         Log.i(TAG, "Se encontraron " + c.getCount() + " registros locales.");
@@ -395,7 +395,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 boolean b10 = match.observaciones != null && !match.observaciones.equals(observaciones);
 
 
-                if (b || b1 || b2 || b3|| b4 || b5 || b6|| b7 || b8 || b9 || b10) {
+//                if (b || b1 || b2 || b3|| b4 || b5 || b6|| b7 || b8 || b9 || b10) {
+                if (estado_act.equalsIgnoreCase("0") || estado_act == null) {
 
                     Log.i(TAG, "Programando actualización de: " + existingUri);
 
@@ -415,15 +416,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             .build());
                     syncResult.stats.numUpdates++;
                 } else {
-                    Log.i(TAG, "No hay acciones para este registro: " + existingUri);
+                    Log.i(TAG, "No se actualizan registros que fueron cargados por el usuario: " + existingUri);
                 }
             } else {
-                // Debido a que la entrada no existe, es removida de la base de datos
-                Uri deleteUri = ContractMedida.CONTENT_URI.buildUpon()
-                        .appendPath(id).build();
-                Log.i(TAG, "Programando eliminación de: " + deleteUri);
-                ops.add(ContentProviderOperation.newDelete(deleteUri).build());
-                syncResult.stats.numDeletes++;
+                if (estado_act == "0" || estado_act == null) {
+                    // Debido a que la entrada no existe, es removida de la base de datos
+                    Uri deleteUri = ContractMedida.CONTENT_URI.buildUpon()
+                            .appendPath(id).build();
+                    Log.i(TAG, "Programando eliminación de: " + deleteUri);
+                    ops.add(ContentProviderOperation.newDelete(deleteUri).build());
+                    syncResult.stats.numDeletes++;
+                }
             }
         }
         c.close();
