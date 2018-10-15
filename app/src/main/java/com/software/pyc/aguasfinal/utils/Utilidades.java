@@ -5,8 +5,6 @@ import android.database.Cursor;
 import android.os.Build;
 import android.util.Log;
 
-import com.software.pyc.aguasfinal.provider.ContractMedida;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,6 +23,7 @@ public class Utilidades {
     public static final int COLUMNA_USUARIO = 10;
     public static final int COLUMNA_ID_REMOTA = 11;
     public static final int COLUMNA_OBSERVACIONES = 12;
+    public static final int COLUMNA_ACTUALIZADO = 13;
 
 
     /**
@@ -38,7 +37,7 @@ public class Utilidades {
     }
 
     /**
-     * Copia los datos de un gasto almacenados en un cursor hacia un
+     * Copia los datos de una medida almacenados en un cursor hacia un
      * JSONObject
      *
      * @param c cursor

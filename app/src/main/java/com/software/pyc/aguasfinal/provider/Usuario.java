@@ -2,6 +2,7 @@ package com.software.pyc.aguasfinal.provider;
 
 /**
  * Created by pablo on 30/4/2018.
+ * Clase de usuario, esta alineado con la BD
  */
 
 public class Usuario {

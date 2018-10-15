@@ -3,6 +3,7 @@ package com.software.pyc.aguasfinal.provider;
 
 /**
  * Created by pablo on 2/8/2018.
+ * Clase que guarda las opciones del where y el orderby
  */
 
 public class ConsultaMedida {

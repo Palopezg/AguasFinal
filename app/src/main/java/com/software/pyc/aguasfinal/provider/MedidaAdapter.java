@@ -14,6 +14,7 @@ package com.software.pyc.aguasfinal.provider;
 
 /**
  * Created by pablo on 1/5/2018.
+ * Adapter de Medida para el RecycleView
  */
 
 public class MedidaAdapter  extends ArrayAdapter<Medida> {
@@ -50,38 +51,24 @@ public class MedidaAdapter  extends ArrayAdapter<Medida> {
 
         //TextView btn = (TextView) itemView.findViewById(R.id.content_request_btn) ;
 
-        RelativeLayout rl = (RelativeLayout) itemView.findViewById(R.id.rlItem);
+        RelativeLayout rl = itemView.findViewById(R.id.rlItem);
 
 
         // Medida actual.
         Medida medida = getItem(position);
 
+        if (medida != null) {
 
-        // Setup.
- /*       int colorFondo = Color.WHITE;
-
-        if (medida.getActualizado().equalsIgnoreCase("TRUE")){
-
-            colorFondo =  Color.parseColor("#ffbf12");
+            ruta.setText(medida.getRuta());
+            nombre.setText(medida.getNombre());
+            orden.setText(medida.getOrden());
+            codigo.setText(medida.getCodigo());
+            medidor.setText(medida.getMedidor());
+            partida.setText(medida.getPartida());
+            estAnt.setText(medida.getEstadoAnterior());
+            estAct.setText(medida.getEstadoActual());
 
         }
-        if (medida.getActualizado().equalsIgnoreCase("FALSE")){
-            colorFondo = Color.parseColor("#ef5350");
-        }
-*/
-
-
-        ruta.setText(medida.getRuta());
-        nombre.setText(medida.getNombre());
-        orden.setText(medida.getOrden());
-        codigo.setText(medida.getCodigo());
-        medidor.setText(medida.getMedidor());
-        partida.setText(medida.getPartida());
-        estAnt.setText(medida.getEstadoAnterior());
-        estAct.setText(medida.getEstadoActual());
-        //rl.setBackgroundColor(colorFondo);
-        //btn.setBackgroundColor(colorFondo);
-
         return itemView;
     }
 }

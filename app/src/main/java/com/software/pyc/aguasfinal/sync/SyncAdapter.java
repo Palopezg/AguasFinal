@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.software.pyc.aguasfinal.R;
 import com.software.pyc.aguasfinal.provider.ContractMedida;
 import com.software.pyc.aguasfinal.utils.Constantes;
+import com.software.pyc.aguasfinal.utils.LogMedida;
 import com.software.pyc.aguasfinal.utils.Utilidades;
 import com.software.pyc.aguasfinal.web.Medida;
 import com.software.pyc.aguasfinal.web.VolleySingleton;
@@ -49,6 +50,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private Gson gson = new Gson();
     Context context;
 
+    LogMedida logMedida = new LogMedida();
+
 
 
     /**
@@ -67,7 +70,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             ContractMedida.Columnas.FECHA_ACT,
             ContractMedida.Columnas.USUARIO,
             ContractMedida.Columnas.ID_REMOTA,
-            ContractMedida.Columnas.OBSERVACIONES
+            ContractMedida.Columnas.OBSERVACIONES,
+            ContractMedida.Columnas.ACTUALIZADO
+
 
     };
 
@@ -172,11 +177,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private void realizarSincronizacionRemota() {
         Log.i(TAG, "Actualizando el servidor...");
 
+        LogMedida.grabaLog(Constantes.LOG_SUBIR_TABLA,"Actualizando el servidor...",context);
+
         iniciarActualizacion();
 
         Cursor c = obtenerRegistrosSucios();
 
         Log.i(TAG, "Se encontraron " + c.getCount() + " registros sucios.");
+        LogMedida.grabaLog(Constantes.LOG_SUBIR_TABLA,"Se encontraron " + c.getCount() + " registros sucios.",context);
 
         if (c.getCount() > 0) {
             while (c.moveToNext()) {
@@ -197,6 +205,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         Log.d(TAG, "Error Volley: " + error.getMessage());
+                                        LogMedida.grabaLog(Constantes.LOG_SUBIR_TABLA,"Error Volley: " + error.getMessage(),context);
                                     }
                                 }
 
@@ -219,6 +228,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         } else {
             Log.i(TAG, "No se requiere sincronización");
+            LogMedida.grabaLog(Constantes.LOG_SUBIR_TABLA,"No se requiere sincronización",context);
             //Toast.makeText(this.context,"No se requiere sincronizacion",Toast.LENGTH_SHORT).show();
         }
         c.close();
@@ -253,6 +263,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         int results = resolver.update(uri, v, selection, selectionArgs);
         Log.i(TAG, "Registros puestos en cola de inserción:" + results);
+        LogMedida.grabaLog(Constantes.LOG_SUBIR_TABLA,"Registros puestos en cola de inserción:" + results,context);
     }
 
     /**
@@ -270,9 +281,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         v.put(ContractMedida.Columnas.PENDIENTE_INSERCION, "0");
         v.put(ContractMedida.Columnas.ESTADO, ContractMedida.ESTADO_OK);
         v.put(ContractMedida.Columnas.ID_REMOTA, idRemota);
-        v.put(ContractMedida.Columnas.ACTUALIZADO,"SYNC");
+        v.put(ContractMedida.Columnas.ACTUALIZADO,Constantes.SYCRONIZADO);
 
         resolver.update(uri, v, selection, selectionArgs);
+
 
 
 
@@ -296,11 +308,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             switch (estado) {
                 case Constantes.SUCCESS:
                     Log.i(TAG, mensaje);
+                    LogMedida.grabaLog(Constantes.LOG_SUBIR_TABLA,mensaje+" idRemota:"+idRemota,context);
                     finalizarActualizacion(idRemota, idLocal);
                     break;
 
                 case Constantes.FAILED:
                     Log.i(TAG, mensaje);
+                    LogMedida.grabaLog(Constantes.LOG_SUBIR_TABLA,mensaje+" idRemota:"+idRemota,context);
                     break;
             }
         } catch (JSONException e) {
@@ -331,10 +345,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         List<Medida> data = Arrays.asList(res);
 
         // Lista para recolección de operaciones pendientes
-        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+        ArrayList<ContentProviderOperation> ops = new ArrayList<>();
 
         // Tabla hash para recibir las entradas entrantes
-        HashMap<String, Medida> expenseMap = new HashMap<String, Medida>();
+        HashMap<String, Medida> expenseMap = new HashMap<>();
         for (Medida e : data) {
             expenseMap.put(e.idMedida, e);
 
@@ -343,13 +357,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         // Consultar registros remotos actuales
         Uri uri = ContractMedida.CONTENT_URI;
         String select = ContractMedida.Columnas.ID_REMOTA + " IS NOT NULL";
-        Cursor c = resolver.query(uri, PROJECTION, null, null, null);
+        Cursor c = resolver.query(uri, PROJECTION, select, null, null);
         assert c != null;
 
         Log.i(TAG, "Se encontraron " + c.getCount() + " registros locales.");
+        LogMedida.grabaLog(Constantes.LOG_BAJA_TABLA,"Se encontraron " + c.getCount() + " registros locales.",context);
+
+
 
         // Encontrar datos obsoletos
-        String id;
+        String id, idRemota, actualizado;
         String ruta, orden, codigo, nombre, medidor, partida, estado_act, estado_ant, fecha_act, usuario, observaciones;
 
         // Datos de la base local
@@ -368,17 +385,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             fecha_act = c.getString(Utilidades.COLUMNA_FECHA_ACT);
             usuario = c.getString(Utilidades.COLUMNA_USUARIO);
             observaciones = c.getString(Utilidades.COLUMNA_OBSERVACIONES);
+            idRemota = c.getString(Utilidades.COLUMNA_ID_REMOTA);
+            actualizado = c.getString(Utilidades.COLUMNA_ACTUALIZADO);
 
 
 
-            Medida match = expenseMap.get(id);
+            Medida match = expenseMap.get(idRemota);
 
             if (match != null) {
                 // Esta entrada existe, por lo que se remueve del mapeado
-                expenseMap.remove(id);
+                expenseMap.remove(idRemota);
 
                 Uri existingUri = ContractMedida.CONTENT_URI.buildUpon()
-                        .appendPath(id).build();
+                        .appendPath(idRemota).build();
+
 
                 // Comprobar si la medida necesita ser actualizado
 
@@ -395,10 +415,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 boolean b10 = match.observaciones != null && !match.observaciones.equals(observaciones);
 
 
+                if (match.estadoActual != null && !match.estadoActual.equalsIgnoreCase("0")){
+                    match.actualizado = Constantes.SYCRONIZADO;
+                }
+
+
 //                if (b || b1 || b2 || b3|| b4 || b5 || b6|| b7 || b8 || b9 || b10) {
-                if (estado_act.equalsIgnoreCase("0") || estado_act == null) {
+              //  if (estado_act.equalsIgnoreCase("0") || estado_act == null) {
+                if (actualizado == null || actualizado.equalsIgnoreCase("")) {
 
                     Log.i(TAG, "Programando actualización de: " + existingUri);
+                    LogMedida.grabaLog(Constantes.LOG_BAJA_TABLA,"Programando actualización de: " + existingUri,context);
 
                     ops.add(ContentProviderOperation.newUpdate(existingUri)
                             .withValue(ContractMedida.Columnas.ID_REMOTA, match.idMedida)
@@ -413,17 +440,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             .withValue(ContractMedida.Columnas.FECHA_ACT, match.fechaActualizacion)
                             .withValue(ContractMedida.Columnas.USUARIO, match.usuario)
                             .withValue(ContractMedida.Columnas.OBSERVACIONES, match.observaciones)
+                            .withValue(ContractMedida.Columnas.ACTUALIZADO, match.actualizado)
                             .build());
                     syncResult.stats.numUpdates++;
                 } else {
                     Log.i(TAG, "No se actualizan registros que fueron cargados por el usuario: " + existingUri);
+                    LogMedida.grabaLog(Constantes.LOG_BAJA_TABLA,"No se actualizan registros que fueron cargados por el usuario: " + existingUri,context);
                 }
             } else {
-                if (estado_act == "0" || estado_act == null) {
+                if (estado_act.equalsIgnoreCase("0") || estado_act == null) {
                     // Debido a que la entrada no existe, es removida de la base de datos
                     Uri deleteUri = ContractMedida.CONTENT_URI.buildUpon()
-                            .appendPath(id).build();
+                            .appendPath(idRemota).build();
                     Log.i(TAG, "Programando eliminación de: " + deleteUri);
+                    LogMedida.grabaLog(Constantes.LOG_BAJA_TABLA,"Programando eliminación de: " + deleteUri,context);
                     ops.add(ContentProviderOperation.newDelete(deleteUri).build());
                     syncResult.stats.numDeletes++;
                 }
@@ -433,7 +463,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         // Insertar items resultantes
         for (Medida e : expenseMap.values()) {
+
+            if (e.estadoActual != null && !e.estadoActual.equalsIgnoreCase("0")){
+                e.actualizado = Constantes.SYCRONIZADO;
+            }
             Log.i(TAG, "Programando inserción de: " + e.idMedida);
+            LogMedida.grabaLog(Constantes.LOG_BAJA_TABLA,"Programando inserción de: " + e.idMedida,context);
             ops.add(ContentProviderOperation.newInsert(ContractMedida.CONTENT_URI)
                     .withValue(ContractMedida.Columnas.ID_REMOTA, e.idMedida)
                     .withValue(ContractMedida.Columnas.RUTA, e.ruta)
@@ -447,6 +482,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     .withValue(ContractMedida.Columnas.FECHA_ACT, e.fechaActualizacion)
                     .withValue(ContractMedida.Columnas.USUARIO, e.usuario)
                     .withValue(ContractMedida.Columnas.OBSERVACIONES, e.observaciones)
+                    .withValue(ContractMedida.Columnas.ACTUALIZADO, e.actualizado)
                     .build());
             syncResult.stats.numInserts++;
         }
@@ -455,6 +491,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 syncResult.stats.numUpdates > 0 ||
                 syncResult.stats.numDeletes > 0) {
             Log.i(TAG, "Aplicando operaciones...");
+            LogMedida.grabaLog(Constantes.LOG_BAJA_TABLA,"Aplicando operaciones...",context);
             try {
                 resolver.applyBatch(ContractMedida.AUTHORITY, ops);
             } catch (RemoteException | OperationApplicationException e) {
@@ -465,9 +502,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     null,
                     false);
             Log.i(TAG, "Sincronización finalizada.");
+            LogMedida.grabaLog(Constantes.LOG_BAJA_TABLA,
+                    "Sincronización finalizada. Cantidad Inserts: "+String.valueOf(syncResult.stats.numInserts)
+                    +" Cantidad Updates: "+String.valueOf(syncResult.stats.numUpdates)
+                    +" Cantidad Deltes: "+String.valueOf(syncResult.stats.numDeletes),context);
 
         } else {
             Log.i(TAG, "No se requiere sincronización");
+            LogMedida.grabaLog(Constantes.LOG_BAJA_TABLA,"No se requiere sincronización",context);
         }
 
     }

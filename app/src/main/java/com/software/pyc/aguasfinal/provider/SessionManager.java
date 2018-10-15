@@ -12,6 +12,8 @@ import java.util.HashMap;
 
 /**
  * Created by pablo on 29/7/2018.
+ * Clase que guarda los datos de session, usuario y perfil
+ *
  */
 
 public class SessionManager {
@@ -65,7 +67,7 @@ public class SessionManager {
         return pref.getString(KEY_PERFIL, null);
     }
     public HashMap<String, String> getUserDetails(){
-        HashMap<String, String> user = new HashMap<String, String>();
+        HashMap<String, String> user = new HashMap<>();
         user.put(KEY_NAME, pref.getString(KEY_NAME, null));
         user.put(KEY_PERFIL, pref.getString(KEY_PERFIL, null));
         return user;

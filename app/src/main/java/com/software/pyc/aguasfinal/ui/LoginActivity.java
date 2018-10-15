@@ -3,6 +3,7 @@ package com.software.pyc.aguasfinal.ui;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,6 +32,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if (shouldAskPermissions()) {
+            askPermissions();
+        }
+
 //      Crea los registro en la base de Usuarios.
        helper.mockData();
 
@@ -51,10 +56,11 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     Cursor cursor = helper.ConsultarUsuPass(String.valueOf(nombre.getText()),String.valueOf(password.getText()));
 
-                    List<Usuario> usu = helper.getListaUsuarios(cursor);
-                    String perfil = usu.get(0).getPerfil();
+
 //                  User y Pass OK
                     if (cursor.getCount() > 0){
+                        List<Usuario> usu = helper.getListaUsuarios(cursor);
+                        String perfil = usu.get(0).getPerfil();
                         sessionManager.createLoginSession(String.valueOf(nombre.getText()), perfil);
                         Intent i = new Intent(getApplicationContext(),ListaActivity.class);
                         startActivity(i);
@@ -72,5 +78,21 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+    @Override
+    public void onBackPressed() {
+
+    }
+    protected boolean shouldAskPermissions() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+    protected void askPermissions() {
+        String[] permissions = {
+                "android.permission.READ_EXTERNAL_STORAGE",
+                "android.permission.WRITE_EXTERNAL_STORAGE"
+        };
+        int requestCode = 200;
+        requestPermissions(permissions, requestCode);
     }
 }

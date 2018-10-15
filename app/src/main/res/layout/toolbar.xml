@@ -4,7 +4,6 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/bt_green"
     android:elevation="@dimen/title_margin"
     android:minHeight="?attr/actionBarSize"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -89,7 +88,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/etBusqueda2"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:srcCompat="@android:drawable/ic_menu_search" />
+            app:srcCompat="@android:drawable/ic_menu_search"
+            android:contentDescription="TODO" />
 
         <Spinner
             android:id="@+id/spOrderBy"

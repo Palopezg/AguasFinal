@@ -42,6 +42,10 @@ public class Constantes {
     public static final String MENSAJE = "mensaje";
     public static final String MEDIDA = "medida";
 
+    public static final String CARGADO = "TRUE";
+    public static final String SYCRONIZADO = "SYNC";
+
+
     /**
      * Códigos del campo { @link ESTADO}
      */
@@ -54,5 +58,14 @@ public class Constantes {
     public static final String ACCOUNT_TYPE = "com.software.pyc.aguasfinal.account";
 
 
+    /**
+     * Nombre de los archivos de log
+     */
+    public static final String LOG_CARGA = "logMedida.txt";
+    public static final String LOG_BAJA_TABLA= "logBajaTabla.txt";
+    public static final String LOG_BORRAR_TABLA = "logBorrarTabla.txt";
+    public static final String LOG_SUBIR_TABLA = "logSubirTabla.txt";
+    public static final String PATH_LOG = "/sdcard/Aguas/";
+    public static final String PATH_APP = "/data/data/com.software.pyc.aguasfinal/databases/";
 }
 

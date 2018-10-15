@@ -23,7 +23,7 @@
             android:gravity="center"
             android:paddingBottom="@dimen/universal_margin"
             android:paddingTop="@dimen/universal_margin"
-            android:text="Ingrese Nueva Carga"></TextView>
+            android:text="Ingrese Nueva Carga" />
 
         <TextView
             android:id="@+id/textView4"

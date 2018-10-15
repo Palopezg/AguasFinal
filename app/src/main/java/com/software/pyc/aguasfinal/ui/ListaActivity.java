@@ -1,11 +1,11 @@
 package com.software.pyc.aguasfinal.ui;
 
 import android.app.ProgressDialog;
-import android.content.ClipData;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
@@ -25,58 +25,39 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.software.pyc.aguasfinal.R;
-
 import com.software.pyc.aguasfinal.provider.*;
 import com.software.pyc.aguasfinal.data.MedidaDBHelper;
 import com.software.pyc.aguasfinal.sync.SyncAdapter;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import com.software.pyc.aguasfinal.utils.Constantes;
+import com.software.pyc.aguasfinal.utils.LogMedida;
 import java.util.List;
 
 public class ListaActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = ListaActivity.class.getSimpleName();
 
-
-    static MedidaAdapter medidaAdapter;
-    static Cursor c;
-    static String rutaSeleccionada;
-    static String opcionBusqueda;
-    static String opcionBusquedaAux;
-    static int posAnterior=1;
-    static View viewAnterior = null;
-    static Medida currentMedida = null;
+    Cursor c;
+    String rutaSeleccionada;
+    String opcionBusqueda;
+    View viewAnterior = null;
+    Medida currentMedida = null;
     Toolbar toolbar;
-
-    static Boolean firstTime = false;
-
+    Boolean firstTime = false;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private AdaptadorDeMedida adapter;
     ProgressDialog progressDoalog;
 
-
-
-
-
     ConsultaMedida consulta = ConsultaMedida.getInstance();
 
     MedidaDBHelper medidaOpenHelper = new MedidaDBHelper(this,ContractMedida.DATABASE_NAME,null,1);
-    static int posicionList =1;
-    static int paddinList=0;
-    static int posElegido=-1;
+    int posicionList =1;
+    int posElegido=-1;
     Boolean flag=true;
 
 
@@ -111,18 +92,13 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
         final SessionManager sessionManager = new SessionManager(getApplicationContext());
         final String usuarioSesion = sessionManager.getUser();
-        final String perfilUsuario = sessionManager.getPerfil();
 
-//        TextView usu = findViewById(R.id.tvUser);
-//        TextView usur = findViewById(R.id.menu_usu);
-//        usur.setText(sessionManager.getUser());
+        TextView usu = findViewById(R.id.tvUser);
+        usu.setText(sessionManager.getUser());
 
 
 //      Inicializa los valores del panel lateral
         inicializaPanelLateral();
-
-
-
 
         recyclerView = findViewById(R.id.reciclador);
         recyclerView.setHasFixedSize(true);
@@ -155,18 +131,11 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
                         Toast.makeText(getApplicationContext(), "Ingrese un valor nuevo...", Toast.LENGTH_SHORT).show();
 
                     } else {
-                        boolean controlCarga = medidaOpenHelper.cargaEstado(currentMedida.getId(), etCargaMedida.getText().toString(), etObservaciones.getText().toString(), "TRUE", usuarioSesion);
+                        boolean controlCarga = medidaOpenHelper.cargaEstado(currentMedida.getId(), etCargaMedida.getText().toString(), etObservaciones.getText().toString(), Constantes.CARGADO, usuarioSesion);
 
-
-                        Date d = Calendar.getInstance().getTime();
-                        String fecha = d.toString() ;
-
-                        SimpleDateFormat df = new SimpleDateFormat("dd-mm-yyyy");
-                        String formattedDate = df.format(d);
-
-                        String mensajeLog = d+"- usuario: "+usuarioSesion+" - id: "+currentMedida.getId()+" - medidor: "+currentMedida.getMedidor()+" - carga: "+etCargaMedida.getText()+" - observaciones: "+etObservaciones.getText() ;
-                        grabaLog(mensajeLog);
-
+                        String mensajeLog = "usuario: "+usuarioSesion+" - id: "+currentMedida.getId()+" - idRemota: "+currentMedida.getIdRemota()+" - medidor: "+currentMedida.getMedidor()+" - carga: "+etCargaMedida.getText()+" - observaciones: "+etObservaciones.getText() ;
+                        //grabaLog(mensajeLog);
+                        LogMedida.grabaLog(Constantes.LOG_CARGA,mensajeLog,getApplicationContext());
 
                         etCargaMedida.setText(null);
                         posicionList = layoutManager.findFirstVisibleItemPosition();
@@ -188,8 +157,8 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
 
                         List<Medida> listaMedida = adapter.getLsMedida();
-
                         currentMedida = listaMedida.get(position);
+
                         posElegido = position;
 
 
@@ -206,9 +175,6 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
                     }
 
-
-
-
                     @Override public void onLongItemClick(View view, int position) {
                         // do whatever
                     }
@@ -220,9 +186,9 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         //Implementacion del spinner buscar
         Spinner spinnerOrderBy =  findViewById(R.id.spOrderBy);
 
-        String[] order_spinner = {"Ordenar por Nombre","Ordenar por Partida","Ordenar por Medidor"};
+        String[] order_spinner = {"Ordenar por Nombre A-Z","Ordenar por Nombre Z-A","Ordenar por Partida A-Z","Ordenar por Partida Z-A","Ordenar por Medidor A-Z","Ordenar por Medidor Z-A"};
 
-        spinnerOrderBy.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner_item, order_spinner));
+        spinnerOrderBy.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_item, order_spinner));
 
         spinnerOrderBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -234,35 +200,38 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
                 String ordenSeleccionada = String.valueOf(adapterView.getItemAtPosition(pos));
 
                 switch (ordenSeleccionada){
-                    case "Ordenar por Nombre":
-                        if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
-                            consulta.setOrderByMetodo("asc");
-                        }else{
-                            consulta.setOrderByMetodo("desc");
-                        }
-
+                    case "Ordenar por Nombre A-Z":
+                        consulta.setOrderByMetodo("asc");
                         consulta.setOrderBy(ContractMedida.Columnas.NOMBRE);
                         posicionList=1;
                         actualizarDatos();
                         break;
-                    case "Ordenar por Partida":
-                        if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
-                            consulta.setOrderByMetodo("asc");
-                        }else{
-                            consulta.setOrderByMetodo("desc");
-                        }
-
+                    case "Ordenar por Nombre Z-A":
+                        consulta.setOrderByMetodo("desc");
+                        consulta.setOrderBy(ContractMedida.Columnas.NOMBRE);
+                        posicionList=1;
+                        actualizarDatos();
+                        break;
+                    case "Ordenar por Partida A-Z":
+                        consulta.setOrderByMetodo("asc");
                         consulta.setOrderBy(ContractMedida.Columnas.ORDEN);
                         posicionList=1;
                         actualizarDatos();
                         break;
-                    case "Ordenar por Medidor":
-                        if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
-                            consulta.setOrderByMetodo("asc");
-                        }else{
-                            consulta.setOrderByMetodo("desc");
-                        }
-
+                    case "Ordenar por Partida Z-A":
+                        consulta.setOrderByMetodo("desc");
+                        consulta.setOrderBy(ContractMedida.Columnas.ORDEN);
+                        posicionList=1;
+                        actualizarDatos();
+                        break;
+                    case "Ordenar por Medidor A-Z":
+                        consulta.setOrderByMetodo("asc");
+                        consulta.setOrderBy(ContractMedida.Columnas.MEDIDOR);
+                        posicionList=1;
+                        actualizarDatos();
+                        break;
+                    case "Ordenar por Medidor Z-A":
+                        consulta.setOrderByMetodo("desc");
                         consulta.setOrderBy(ContractMedida.Columnas.MEDIDOR);
                         posicionList=1;
                         actualizarDatos();
@@ -282,7 +251,7 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         Spinner spinner = findViewById(R.id.spRuta);
         String[] ruta_spinner = {"Todas","Ruta 1","Ruta 2","Ruta 3","Ruta 4"};
 
-        spinner.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner_item, ruta_spinner));
+        spinner.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_item, ruta_spinner));
         spinner.setSelection(1);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -294,7 +263,7 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
                 String ordenSel = String.valueOf(adapterView.getItemAtPosition(pos));
                 switch (ordenSel){
                     case "Todas":
-                        ordenSel=null;
+                        ordenSel="*";
                         break;
                     case "Ruta 1":
                         ordenSel="1";
@@ -310,7 +279,11 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
                         break;
                 }
 
-                rutaSeleccionada = ContractMedida.Columnas.RUTA+"="+String.valueOf(ordenSel);
+                if (ordenSel.equalsIgnoreCase("*")){
+                    rutaSeleccionada = "";
+                }else {
+                    rutaSeleccionada = ContractMedida.Columnas.RUTA + "=" + String.valueOf(ordenSel);
+                }
 
                 consulta.setRuta(rutaSeleccionada);
                 actualizarDatos();
@@ -326,9 +299,6 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         ImageButton btnBusqueda = findViewById(R.id.btnBusqueda);
         final EditText etbusqueda = findViewById(R.id.etBusqueda2);
 
-        String[] busqueda_spinner = {"Nombre","Partida","Medidor"};
-
-
         btnBusqueda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -337,9 +307,9 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
                 opcionBusqueda= ContractMedida.Columnas.NOMBRE+" like '%"+busquedaValor+"%' or "
                               +ContractMedida.Columnas.PARTIDA+" like '%"+busquedaValor+"%' or "
+                              +ContractMedida.Columnas.CODIGO+" like '%"+busquedaValor+"%' or "
                               +ContractMedida.Columnas.MEDIDOR+" like '%"+busquedaValor+"%'";
 
-//                opcionBusqueda=opcionBusquedaAux+" like '%"+busquedaValor+"%'";
                 Log.i(TAG, opcionBusqueda);
                 consulta.addWhereAnd(opcionBusqueda);
                 consulta.setOffset(1);
@@ -349,82 +319,6 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
             }
         });
 
-
-
-        recyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position = recyclerView.getChildLayoutPosition(v);
-                Medida currentMedida = medidaAdapter.getItem(position);
-
-                CargaMedida d = new CargaMedida();
-                d.Carga(currentMedida);
-                d.show(getFragmentManager(),"");
-
-            }
-        });
-    }
-    public static boolean copiaBD() {
-        Date d = Calendar.getInstance().getTime();
-        String fecha = d.toString() ;
-
-        SimpleDateFormat df = new SimpleDateFormat("dd-mm-yyyy");
-        String formattedDate = df.format(d);
-
-        String from= "/data/data/com.software.pyc.aguasfinal/databases/aguas.db";
-        String to="/data/data/com.software.pyc.aguasfinal/databases/aguas1.db-"+formattedDate;
-        boolean result = false;
-        try{
-            File dir = new File(to.substring(0, to.lastIndexOf('/')));
-            dir.mkdirs();
-            File tof = new File(dir, to.substring(to.lastIndexOf('/')));
-            int byteread;
-            File oldfile = new File(from);
-            if(oldfile.exists()){
-                InputStream inStream = new FileInputStream(from);
-                FileOutputStream fs = new FileOutputStream(tof);
-                byte[] buffer = new byte[1024];
-                while((byteread = inStream.read(buffer)) != -1){
-                    fs.write(buffer, 0, byteread);
-                }
-                inStream.close();
-                fs.close();
-            }
-            result = true;
-        }catch (Exception e){
-            Log.e("copyFile", "Error copiando archivo: " + e.getMessage());
-        }
-        try {
-            File log = new File("/data/data/com.software.pyc.aguasfinal/files/logMedida.txt");
-            File logBk = new File("/data/data/com.software.pyc.aguasfinal/files/logMedida.txt-"+formattedDate);
-            log.renameTo(logBk);
-        }catch (Exception e){
-            Log.e("copyFile", "Error borrando el log " + e.getMessage());
-        }
-
-        return result;
-    }
-
-
-    private void grabaLog(String mensajeLog) {
-
-        try
-        {
-
-            OutputStreamWriter fout=
-                    new OutputStreamWriter(
-                            openFileOutput("logMedida.txt", Context.MODE_APPEND));
-
-            //fout.append(mensajeLog);
-            fout.write(mensajeLog);
-            fout.append("\r\n");
-            fout.flush();
-            fout.close();
-        }
-        catch (Exception ex)
-        {
-            Log.e("Ficheros", "Error al escribir fichero a memoria interna");
-        }
 
     }
 
@@ -440,6 +334,10 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
             TextView estAnt_l = findViewById(R.id.itemAnt_pl);
             EditText panelEstAct = findViewById(R.id.etIngresarMedida_pl);
             EditText panelObsrevaciones = findViewById(R.id.etObservaciones);
+            ImageView imagen_ini = findViewById(R.id.plEmpty);
+
+
+            imagen_ini.setVisibility(View.GONE);
 
 
             panelEstAct.setText(med.getEstadoActual());
@@ -453,10 +351,10 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
             estAnt_l.setText(med.getEstadoAnterior());
             rl_1.setBackgroundColor(getResources().getColor(R.color.bt_blue));
             if (med.getActualizado() != null) {
-                if (med.getActualizado().equalsIgnoreCase("TRUE")) {
+                if (med.getActualizado().equalsIgnoreCase(Constantes.CARGADO)) {
                     rl_1.setBackgroundColor(getResources().getColor(R.color.bt_yellow));
                 } else {
-                    if (med.getActualizado().equalsIgnoreCase("SYNC")) {
+                    if (med.getActualizado().equalsIgnoreCase(Constantes.SYCRONIZADO)) {
                         rl_1.setBackgroundColor(getResources().getColor(R.color.bt_green));
                     }
                 }
@@ -476,14 +374,17 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         TextView orden_ini = findViewById(R.id.itemOrden_pl);
         TextView estAnt_ini = findViewById(R.id.itemAnt_pl);
 
+        String no_data = "Sin datos";
+
+
         rl_ini.setBackgroundColor(getResources().getColor(R.color.bt_bg_gris));
-        ruta_ini.setText(null);
-        medidor_ini.setText(null);
-        nombre_ini.setText(null);
-        codigo_ini.setText(null);
-        partida_ini.setText(null);
-        orden_ini.setText(null);
-        estAnt_ini.setText(null);
+        ruta_ini.setText(no_data);
+        medidor_ini.setText(no_data);
+        nombre_ini.setText(no_data);
+        codigo_ini.setText(no_data);
+        partida_ini.setText(no_data);
+        orden_ini.setText(no_data);
+        estAnt_ini.setText(no_data);
     }
 
 
@@ -495,21 +396,27 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
     //  Instanciacion del menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        final String perfilUsuario = sessionManager.getPerfil();
+        if (perfilUsuario.equalsIgnoreCase("admin")){
+            getMenuInflater().inflate(R.menu.menu_admin, menu);
+        }else {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+        }
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         SessionManager sessionManager = new SessionManager(getApplicationContext());
-        final String usuarioSesion = sessionManager.getUser();
         final String perfilUsuario = sessionManager.getPerfil();
+
 
         if (id == R.id.dropTable) {
             if (perfilUsuario.equalsIgnoreCase("admin")) {
-                if (copiaBD()) {
+                if (LogMedida.copiaBD()) {
                     dropTable();
                     inicializaPanelLateral();
                     actualizarDatos();
@@ -567,6 +474,7 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
                 progressDoalog.show();
 
 
+
                 return true;
             }
 
@@ -584,6 +492,7 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        Log.i(TAG, "onCreateLoader...");
         // Consultar todos los registros
         return new CursorLoader(
                 this,
@@ -610,6 +519,7 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
         actualizarDatos();
+        Log.i(TAG, "onLoadReset...");
     }
 
     public static boolean compruebaConexion(Context context) {
@@ -620,15 +530,25 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
         // Recupera todas las redes (tanto móviles como wifi)
         NetworkInfo[] redes = connec.getAllNetworkInfo();
+        if (redes != null) {
 
-        for (int i = 0; i < redes.length; i++) {
-            // Si alguna red tiene conexión, se devuelve true
-            if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
-                connected = true;
+            for (NetworkInfo rede : redes) {
+                // Si alguna red tiene conexión, se devuelve true
+                if (rede.getState() == NetworkInfo.State.CONNECTED) {
+                    connected = true;
+                }
             }
         }
         return connected;
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
+
+
 
 }
 

@@ -83,7 +83,7 @@ public class MedidaDBHelper extends SQLiteOpenHelper {
     // Trae Todos los datos de la base
     public Cursor getAllMedidas(String orderBy, String busqueda) {
 
-        Cursor c = null;
+        Cursor c;
         c = this.getReadableDatabase()
                 .query(
                         ContractMedida.MEDIDA,
@@ -101,7 +101,7 @@ public class MedidaDBHelper extends SQLiteOpenHelper {
     // Trae Todos los datos de la base
     public Cursor getAllMedidas(String orderBy, String busqueda, String limite) {
 
-        Cursor c = null;
+        Cursor c;
         c = this.getReadableDatabase()
                 .query(
                         ContractMedida.MEDIDA,
@@ -119,7 +119,7 @@ public class MedidaDBHelper extends SQLiteOpenHelper {
     // Trae Todos los datos de la base
     public int getCantAllMedidas(String orderBy, String busqueda, String limite) {
 
-        Cursor c = null;
+        Cursor c;
         c = this.getReadableDatabase()
                 .query(
                         ContractMedida.MEDIDA,
@@ -138,7 +138,7 @@ public class MedidaDBHelper extends SQLiteOpenHelper {
     // Trae Todos los datos de la base
     public Cursor getRutaMedidas(String ruta, String orderBy,  String busqueda) {
 
-        Cursor c = null;
+        Cursor c;
         c = this.getReadableDatabase()
                 .query(
                         ContractMedida.MEDIDA,
@@ -162,7 +162,8 @@ public class MedidaDBHelper extends SQLiteOpenHelper {
                 listaMedida.add(new Medida(c.getString(0),c.getString(1),c.getString(2),
                         c.getString(3),c.getString(4),c.getString(5),
                         c.getString(6),c.getString(7),c.getString(8),
-                        c.getString(9),c.getString(10),c.getString(11),c.getString(12)));
+                        c.getString(9),c.getString(10),c.getString(11),c.getString(12),
+                        c.getString(13)));
             } while (c.moveToNext());
         }
 

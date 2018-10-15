@@ -165,14 +165,14 @@
             android:id="@+id/itemPartida_pl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="7dp"
             android:text="Partida"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textColor="@android:color/black"
             android:textSize="@dimen/item_large"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/itemCodigo_pl"
+            app:layout_constraintStart_toEndOf="@+id/textView9_pl"
             app:layout_constraintTop_toBottomOf="@+id/cl_card_title_pl" />
 
         <TextView
@@ -252,6 +252,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="51dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="32dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
@@ -260,10 +261,12 @@
             android:elevation="5dp"
             android:text="Aceptar"
             android:textColor="@color/bt_white"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etObservaciones" />
+            app:layout_constraintTop_toBottomOf="@+id/etObservaciones"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/tvObservaciones"
@@ -284,7 +287,6 @@
             android:id="@+id/etObservaciones"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="32dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
@@ -296,10 +298,25 @@
             android:lines="3"
             android:minLines="3"
             android:singleLine="false"
-            app:layout_constraintBottom_toTopOf="@+id/btnPLAceptar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvObservaciones" />
+
+        <ImageView
+            android:id="@+id/plEmpty"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/bt_bg_gris"
+            android:elevation="10sp"
+            android:tint="@color/bt_blue"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/document_empty_file"
+            android:contentDescription="TODO" />
 
     </android.support.constraint.ConstraintLayout>
 

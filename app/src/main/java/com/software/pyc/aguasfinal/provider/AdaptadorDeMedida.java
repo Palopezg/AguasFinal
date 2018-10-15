@@ -8,11 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.software.pyc.aguasfinal.R;
 import com.software.pyc.aguasfinal.sync.SyncAdapter;
+import com.software.pyc.aguasfinal.utils.Constantes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,10 +120,10 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             Log.i(TAG, "estado: "+estado+"   actualizado: "+actualizado);
 
              if (actualizado != null) {
-                 if (actualizado.equalsIgnoreCase("TRUE")) {
+                 if (actualizado.equalsIgnoreCase(Constantes.CARGADO)) {
                      viewHolder.statusIndicator.setBackgroundResource(R.color.bt_yellow);
                  }else {
-                     if (actualizado.equalsIgnoreCase("SYNC")) {
+                     if (actualizado.equalsIgnoreCase(Constantes.SYCRONIZADO)) {
                          viewHolder.statusIndicator.setBackgroundResource(R.color.bt_green);
                      }
                  }
@@ -149,7 +149,8 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
                     listaMedida.add(new Medida(c.getString(0),c.getString(1),c.getString(2),
                             c.getString(3),c.getString(4),c.getString(5),
                             c.getString(6),c.getString(7),c.getString(8),
-                            c.getString(9),c.getString(10),c.getString(11),c.getString(12)));
+                            c.getString(9),c.getString(10),c.getString(11),c.getString(12),
+                            c.getString(13)));
                 } while (c.moveToNext());
             }
 

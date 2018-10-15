@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by pablo on 29/4/2018.
+ * Open Helper de la tabla user.
  */
 
 public class User_OpenHelper extends SQLiteOpenHelper {
@@ -57,7 +58,7 @@ public class User_OpenHelper extends SQLiteOpenHelper {
 
     // Metodo que permite  validar si el usuario existe
     public Cursor ConsultarUsuPass(String usu, String pass) throws SQLException{
-      Cursor mcursor = null;
+      Cursor mcursor;
       mcursor =  this.getReadableDatabase().query(
               "usuarios",new String[]{"_ID, Nombre, Password, Perfil"},
               "Nombre like '"+usu+"' and Password like '"+pass+"'",
@@ -69,13 +70,13 @@ public class User_OpenHelper extends SQLiteOpenHelper {
 
 
       return mcursor;
-    };
+    }
 
 
 
     // Metodo que permite mostrar todos los usuaios
     public Cursor ConsultarUsuTodos() throws SQLException{
-        Cursor mcursor = null;
+        Cursor mcursor;
         mcursor =  this.getReadableDatabase().query(
                 "usuarios",new String[]{"_ID, Nombre"},
                 null,
@@ -87,10 +88,10 @@ public class User_OpenHelper extends SQLiteOpenHelper {
 
 
         return mcursor;
-    };
+    }
 
     public  List<Usuario> getListaUsuarios(Cursor c) {
-        List<Usuario> listaUsuarios = new ArrayList<Usuario>();
+        List<Usuario> listaUsuarios = new ArrayList<>();
 
         // Si el cursor contiene datos los añadimos al List
 

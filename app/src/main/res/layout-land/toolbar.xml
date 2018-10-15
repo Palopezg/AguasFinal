@@ -21,7 +21,7 @@
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
             android:text="Usuario"
             android:textAppearance="@style/TextAppearance.Compat.Notification"
@@ -82,7 +82,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/etBusqueda2"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_search" />
+            app:srcCompat="@android:drawable/ic_menu_search"
+            android:contentDescription="TODO" />
 
         <Spinner
             android:id="@+id/spOrderBy"
