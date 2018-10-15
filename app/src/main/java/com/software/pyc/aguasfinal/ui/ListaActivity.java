@@ -431,6 +431,11 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
             logOut();
         }
 
+        if (id == R.id.itemUsuarios) {
+            // agregar la llamada al activity para modificar/crear usuarios
+        }
+
+
         if (id == R.id.action_sync) {
             if (!compruebaConexion(this)) {
                 Toast.makeText(getBaseContext(), "Necesaria conexión a internet ", Toast.LENGTH_SHORT).show();
