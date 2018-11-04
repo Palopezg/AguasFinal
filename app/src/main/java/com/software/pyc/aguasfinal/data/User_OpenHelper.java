@@ -40,9 +40,9 @@ public class User_OpenHelper extends SQLiteOpenHelper {
 
     public void mockData(){
 
-        this.insertarRegistro(1,"pablo","1234","oper");
-        this.insertarRegistro(2,"vero","1234","oper");
-        this.insertarRegistro(3,"crii","1234","oper");
+        this.insertarRegistro(1,"mmasetti","mmasetti","oper");
+        this.insertarRegistro(2,"mcontreras","mcontreras","oper");
+        this.insertarRegistro(3,"bbalbiano","bbalbiano","oper");
         this.insertarRegistro(4,"admin","admin","admin");
     }
 

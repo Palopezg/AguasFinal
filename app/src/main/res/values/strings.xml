@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Aguas Ventanas</string>
+    <string name="app_name">Aguas Ventana</string>
 
     <!--Provider y account-->
     <string name="account_type">com.software.pyc.aguasfinal.account</string>

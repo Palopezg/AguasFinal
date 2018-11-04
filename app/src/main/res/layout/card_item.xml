@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="Medidor"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/bt_white"
             android:textSize="@dimen/item_small"
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"

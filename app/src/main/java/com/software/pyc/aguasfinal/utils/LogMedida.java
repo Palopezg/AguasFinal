@@ -93,7 +93,7 @@ public class LogMedida {
         try{
             File dir = new File(to.substring(0, to.lastIndexOf('/')));
             dir.mkdirs();
-            File tof = new File(ruta_sd.getAbsolutePath(),DBName+"-"+formattedDate);
+            File tof = new File(ruta_sd.getAbsolutePath(),DBName+"-"+formattedDate+".db");
             tof.setReadable(true,false);
 
 //            File tof = new File(dir, to.substring(to.lastIndexOf('/')));
@@ -116,13 +116,13 @@ public class LogMedida {
         try {
 
             File log = new File(ruta_sd.getAbsolutePath(),Constantes.LOG_CARGA);
-            File logBk = new File(ruta_sd.getAbsolutePath(),Constantes.LOG_CARGA+"-"+formattedDate);
+            File logBk = new File(ruta_sd.getAbsolutePath(),Constantes.LOG_CARGA+"-"+formattedDate+".txt");
             log.renameTo(logBk);
             File logBaja = new File(ruta_sd.getAbsolutePath(),Constantes.LOG_BAJA_TABLA);
-            File logBajaBk = new File(ruta_sd.getAbsolutePath(),Constantes.LOG_BAJA_TABLA+"-"+formattedDate);
+            File logBajaBk = new File(ruta_sd.getAbsolutePath(),Constantes.LOG_BAJA_TABLA+"-"+formattedDate+".txt");
             logBaja.renameTo(logBajaBk);
             File logSubir = new File(ruta_sd.getAbsolutePath(),Constantes.LOG_SUBIR_TABLA);
-            File logSubirBk = new File(ruta_sd.getAbsolutePath(),Constantes.LOG_SUBIR_TABLA+"-"+formattedDate);
+            File logSubirBk = new File(ruta_sd.getAbsolutePath(),Constantes.LOG_SUBIR_TABLA+"-"+formattedDate+".txt");
             logSubir.renameTo(logSubirBk);
         }catch (Exception e){
             Log.e("copyFile", "Error borrando el LogMedida " + e.getMessage());

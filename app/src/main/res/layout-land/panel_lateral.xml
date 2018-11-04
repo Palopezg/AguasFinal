@@ -95,9 +95,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Medidor"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@color/bt_white"
                 android:textSize="@dimen/item_small"
-                android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/itemMedidor_pl" />
@@ -117,7 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
             android:text="Estado Actual"
             android:textColor="@color/bt_blue"
             android:textSize="24sp"
@@ -208,7 +207,6 @@
             android:text="Estado Anterior"
             android:textColor="@android:color/darker_gray"
             android:textSize="@dimen/item_small"
-            android:textStyle="italic"
             app:layout_constraintStart_toStartOf="@+id/itemAnt_pl"
             app:layout_constraintTop_toBottomOf="@+id/itemAnt_pl" />
 
@@ -219,7 +217,6 @@
             android:text="Codigo"
             android:textColor="@android:color/darker_gray"
             android:textSize="@dimen/item_small"
-            android:textStyle="italic"
             app:layout_constraintStart_toStartOf="@+id/itemCodigo_pl"
             app:layout_constraintTop_toBottomOf="@+id/itemCodigo_pl" />
 
@@ -230,7 +227,6 @@
             android:text="Orden"
             android:textColor="@android:color/darker_gray"
             android:textSize="@dimen/item_small"
-            android:textStyle="italic"
             app:layout_constraintStart_toStartOf="@+id/itemOrden_pl"
             app:layout_constraintTop_toBottomOf="@+id/itemOrden_pl" />
 
@@ -241,7 +237,6 @@
             android:text="Partida"
             android:textColor="@android:color/darker_gray"
             android:textSize="@dimen/item_small"
-            android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="@+id/textView9_pl"
             app:layout_constraintStart_toStartOf="@+id/itemPartida_pl"
             app:layout_constraintTop_toBottomOf="@+id/itemPartida_pl" />

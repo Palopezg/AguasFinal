@@ -280,7 +280,7 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
                 }
 
                 if (ordenSel.equalsIgnoreCase("*")){
-                    rutaSeleccionada = "";
+                    rutaSeleccionada = "1=1";
                 }else {
                     rutaSeleccionada = ContractMedida.Columnas.RUTA + "=" + String.valueOf(ordenSel);
                 }
