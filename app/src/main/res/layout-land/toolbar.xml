@@ -53,11 +53,10 @@
         <EditText
             android:id="@+id/etBusqueda2"
             style="?android:attr/editTextStyle"
-            android:layout_width="174dp"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
             android:ems="10"
             android:focusable="auto"
@@ -66,8 +65,7 @@
             android:inputType="textPersonName"
             android:textColor="@color/bt_white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnBusqueda"
-            app:layout_constraintStart_toEndOf="@+id/spOrderBy"
+            app:layout_constraintStart_toEndOf="@+id/spRuta"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
@@ -84,18 +82,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_menu_search"
             android:contentDescription="TODO" />
-
-        <Spinner
-            android:id="@+id/spOrderBy"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:popupBackground="@color/bt_blue"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/spRuta"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 

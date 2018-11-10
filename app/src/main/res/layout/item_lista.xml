@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rlItem"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <TextView
+            android:id="@+id/itemRuta"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="Ruta"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/itemOrden"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemRuta"
+            android:text="Orden" />
+
+        <TextView
+            android:id="@+id/itemCodigo"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/itemOrden"
+            android:layout_alignBottom="@+id/itemOrden"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemOrden"
+            android:text="Código"
+            android:textAlignment="textStart" />
+
+        <TextView
+            android:id="@+id/itemNombre"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/itemCodigo"
+            android:layout_alignBottom="@+id/itemCodigo"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemCodigo"
+            android:text="Nombre"
+            android:textAlignment="textStart" />
+
+        <TextView
+            android:id="@+id/itemMedidor"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemNombre"
+            android:text="Medidor"
+            android:textAlignment="textStart" />
+
+
+
+        <TextView
+            android:id="@+id/itemPartida"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemMedidor"
+            android:text="Partida"
+            android:textAlignment="textStart" />
+
+
+
+        <TextView
+            android:id="@+id/itemAnt"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemPartida"
+            android:text="Estado Anterior"
+            android:textAlignment="textStart" />
+
+        <TextView
+            android:id="@+id/itemAct"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemAnt"
+            android:text="Estado Actual"
+            android:textAlignment="textStart" />
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

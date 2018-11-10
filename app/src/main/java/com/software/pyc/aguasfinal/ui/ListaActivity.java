@@ -37,7 +37,7 @@ import com.software.pyc.aguasfinal.utils.Constantes;
 import com.software.pyc.aguasfinal.utils.LogMedida;
 import java.util.List;
 
-public class ListaActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ListaActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, CargaMedida.OnSimpleDialogListener {
 
     private static final String TAG = ListaActivity.class.getSimpleName();
 
@@ -61,6 +61,14 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
     Boolean flag=true;
 
 
+    public void onPossitiveButtonClick() {
+        //medidaAdapter = new MedidaAdapter(getApplicationContext(), medidaOpenHelper.getListaMedidas(medidaOpenHelper.getAllMedidas(orderBy)));
+        Toast.makeText(getApplicationContext(),"OnClickListener" ,Toast.LENGTH_SHORT).show();
+        //medidaAdapter.notifyDataSetChanged();
+        //listMedida = medidaOpenHelper.getListaMedidas(medidaOpenHelper.getAllMedidas());
+        actualizarDatos();
+
+    }
 
     public void actualizarDatos(){
 
@@ -97,8 +105,6 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         usu.setText(sessionManager.getUser());
 
 
-//      Inicializa los valores del panel lateral
-        inicializaPanelLateral();
 
         recyclerView = findViewById(R.id.reciclador);
         recyclerView.setHasFixedSize(true);
@@ -114,42 +120,6 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         recyclerView.setAdapter(adapter);
         getSupportLoaderManager().initLoader(0, null, this);
 
-        Button btnCargaMedida = findViewById(R.id.btnPLAceptar);
-
-
-
-        btnCargaMedida.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText etCargaMedida = findViewById(R.id.etIngresarMedida_pl);
-                EditText etObservaciones = findViewById(R.id.etObservaciones);
-
-                if (currentMedida == null) {
-                    Toast.makeText(getApplicationContext(), "Seleccione un item...", Toast.LENGTH_SHORT).show();
-                }else {
-                    if (etCargaMedida.getText().toString().trim().equalsIgnoreCase("")) {
-                        Toast.makeText(getApplicationContext(), "Ingrese un valor nuevo...", Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        boolean controlCarga = medidaOpenHelper.cargaEstado(currentMedida.getId(), etCargaMedida.getText().toString(), etObservaciones.getText().toString(), Constantes.CARGADO, usuarioSesion);
-
-                        String mensajeLog = "usuario: "+usuarioSesion+" - id: "+currentMedida.getId()+" - idRemota: "+currentMedida.getIdRemota()+" - medidor: "+currentMedida.getMedidor()+" - carga: "+etCargaMedida.getText()+" - observaciones: "+etObservaciones.getText() ;
-                        //grabaLog(mensajeLog);
-                        LogMedida.grabaLog(Constantes.LOG_CARGA,mensajeLog,getApplicationContext());
-
-                        etCargaMedida.setText(null);
-                        posicionList = layoutManager.findFirstVisibleItemPosition();
-                        actualizarDatos();
-
-
-                        cargaPanelLateral(adapter.getLsMedida().get(posElegido));
-
-                    }
-                }
-            }
-        });
-
-
 
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
@@ -161,17 +131,20 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
                         posElegido = position;
 
+                        CargaMedida d = new CargaMedida();
+                        d.Carga(currentMedida);
+                        d.show(getFragmentManager(),"");
 
-                        if (viewAnterior != null) {
+
+/*                        if (viewAnterior != null) {
                             viewAnterior.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.borde_item_black));
                             viewAnterior.setElevation(0);
                         }
                         viewAnterior = view;
 
                         view.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.borde_item));
-                        view.setElevation(8);
+                        view.setElevation(8);*/
 
-                        cargaPanelLateral(currentMedida);
 
                     }
 
@@ -183,69 +156,115 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
 
 
-        //Implementacion del spinner buscar
-        Spinner spinnerOrderBy =  findViewById(R.id.spOrderBy);
+        //Ordenamientos
+        TextView orderByOrden = findViewById(R.id.lvOrden);
+        TextView orderByCodigo = findViewById(R.id.lvCodigo);
+        TextView orderByNombre = findViewById(R.id.lvNombre);
+        TextView orderByMedidor = findViewById(R.id.lvMedidor);
+        TextView orderByPartida = findViewById(R.id.lvPartida);
+        TextView orderByAnt = findViewById(R.id.lvAnt);
+        TextView orderByAct = findViewById(R.id.lvAct);
 
-        String[] order_spinner = {"Ordenar por Nombre A-Z","Ordenar por Nombre Z-A","Ordenar por Partida A-Z","Ordenar por Partida Z-A","Ordenar por Medidor A-Z","Ordenar por Medidor Z-A"};
-
-        spinnerOrderBy.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_item, order_spinner));
-
-        spinnerOrderBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
+        orderByOrden.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id)
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                    consulta.setOrderByMetodo("asc");
+                }else{
+                    consulta.setOrderByMetodo("desc");
+                };
 
-            {
-
-                String ordenSeleccionada = String.valueOf(adapterView.getItemAtPosition(pos));
-
-                switch (ordenSeleccionada){
-                    case "Ordenar por Nombre A-Z":
-                        consulta.setOrderByMetodo("asc");
-                        consulta.setOrderBy(ContractMedida.Columnas.NOMBRE);
-                        posicionList=1;
-                        actualizarDatos();
-                        break;
-                    case "Ordenar por Nombre Z-A":
-                        consulta.setOrderByMetodo("desc");
-                        consulta.setOrderBy(ContractMedida.Columnas.NOMBRE);
-                        posicionList=1;
-                        actualizarDatos();
-                        break;
-                    case "Ordenar por Partida A-Z":
-                        consulta.setOrderByMetodo("asc");
-                        consulta.setOrderBy(ContractMedida.Columnas.ORDEN);
-                        posicionList=1;
-                        actualizarDatos();
-                        break;
-                    case "Ordenar por Partida Z-A":
-                        consulta.setOrderByMetodo("desc");
-                        consulta.setOrderBy(ContractMedida.Columnas.ORDEN);
-                        posicionList=1;
-                        actualizarDatos();
-                        break;
-                    case "Ordenar por Medidor A-Z":
-                        consulta.setOrderByMetodo("asc");
-                        consulta.setOrderBy(ContractMedida.Columnas.MEDIDOR);
-                        posicionList=1;
-                        actualizarDatos();
-                        break;
-                    case "Ordenar por Medidor Z-A":
-                        consulta.setOrderByMetodo("desc");
-                        consulta.setOrderBy(ContractMedida.Columnas.MEDIDOR);
-                        posicionList=1;
-                        actualizarDatos();
-                        break;
-                }
-
-
-
+                consulta.setOrderBy(ContractMedida.Columnas.ORDEN);
+                posicionList=0;
+                actualizarDatos();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {    }
         });
+        orderByCodigo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                    consulta.setOrderByMetodo("asc");
+                }else{
+                    consulta.setOrderByMetodo("desc");
+                };
+
+                consulta.setOrderBy(ContractMedida.Columnas.CODIGO);
+                posicionList=0;
+                actualizarDatos();
+            }
+        });
+        orderByNombre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                    consulta.setOrderByMetodo("asc");
+                }else{
+                    consulta.setOrderByMetodo("desc");
+                };
+
+                consulta.setOrderBy(ContractMedida.Columnas.NOMBRE);
+                posicionList=0;
+                actualizarDatos();
+            }
+        });
+        orderByMedidor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                    consulta.setOrderByMetodo("asc");
+                }else{
+                    consulta.setOrderByMetodo("desc");
+                };
+
+                consulta.setOrderBy(ContractMedida.Columnas.MEDIDOR);
+                posicionList=0;
+                actualizarDatos();
+            }
+        });
+        orderByPartida.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                    consulta.setOrderByMetodo("asc");
+                }else{
+                    consulta.setOrderByMetodo("desc");
+                };
+
+                consulta.setOrderBy(ContractMedida.Columnas.PARTIDA);
+                posicionList=0;
+                actualizarDatos();
+            }
+        });
+        orderByAnt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                    consulta.setOrderByMetodo("asc");
+                }else{
+                    consulta.setOrderByMetodo("desc");
+                };
+
+                consulta.setOrderBy(ContractMedida.Columnas.ESTADO_ANT);
+                posicionList=0;
+                actualizarDatos();
+            }
+        });
+        orderByAct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                    consulta.setOrderByMetodo("asc");
+                }else{
+                    consulta.setOrderByMetodo("desc");
+                };
+
+                consulta.setOrderBy(ContractMedida.Columnas.ESTADO_ACT);
+                posicionList=0;
+                actualizarDatos();
+            }
+        });
+
+
 
         //Implementacion del spinner ruta
         Spinner spinner = findViewById(R.id.spRuta);
@@ -322,71 +341,6 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
     }
 
-    private void cargaPanelLateral(Medida med) {
-        if (med != null) {
-            ConstraintLayout rl_1 = findViewById(R.id.cl_card_title_pl);
-            TextView ruta_1 = findViewById(R.id.itemRuta_pl);
-            TextView medidor_1 = findViewById(R.id.itemMedidor_pl);
-            TextView nombre_1 = findViewById(R.id.itemNombre_pl);
-            TextView codigo_l = findViewById(R.id.itemCodigo_pl);
-            TextView partida_l = findViewById(R.id.itemPartida_pl);
-            TextView orden_l = findViewById(R.id.itemOrden_pl);
-            TextView estAnt_l = findViewById(R.id.itemAnt_pl);
-            EditText panelEstAct = findViewById(R.id.etIngresarMedida_pl);
-            EditText panelObsrevaciones = findViewById(R.id.etObservaciones);
-            ImageView imagen_ini = findViewById(R.id.plEmpty);
-
-
-            imagen_ini.setVisibility(View.GONE);
-
-
-            panelEstAct.setText(med.getEstadoActual());
-            panelObsrevaciones.setText(med.getObservaciones());
-            ruta_1.setText(med.getRuta());
-            medidor_1.setText(med.getMedidor());
-            nombre_1.setText(med.getNombre());
-            codigo_l.setText(med.getCodigo());
-            partida_l.setText(med.getPartida());
-            orden_l.setText(med.getOrden());
-            estAnt_l.setText(med.getEstadoAnterior());
-            rl_1.setBackgroundColor(getResources().getColor(R.color.bt_blue));
-            if (med.getActualizado() != null) {
-                if (med.getActualizado().equalsIgnoreCase(Constantes.CARGADO)) {
-                    rl_1.setBackgroundColor(getResources().getColor(R.color.bt_yellow));
-                } else {
-                    if (med.getActualizado().equalsIgnoreCase(Constantes.SYCRONIZADO)) {
-                        rl_1.setBackgroundColor(getResources().getColor(R.color.bt_green));
-                    }
-                }
-            } else {
-                rl_1.setBackgroundColor(getResources().getColor(R.color.bt_red));
-            }
-        }
-    }
-
-    private void inicializaPanelLateral() {
-        ConstraintLayout rl_ini =  findViewById(R.id.cl_card_title_pl);
-        TextView ruta_ini = findViewById(R.id.itemRuta_pl);
-        TextView medidor_ini = findViewById(R.id.itemMedidor_pl);
-        TextView nombre_ini = findViewById(R.id.itemNombre_pl);
-        TextView codigo_ini = findViewById(R.id.itemCodigo_pl);
-        TextView partida_ini = findViewById(R.id.itemPartida_pl);
-        TextView orden_ini = findViewById(R.id.itemOrden_pl);
-        TextView estAnt_ini = findViewById(R.id.itemAnt_pl);
-
-        String no_data = "Sin datos";
-
-
-        rl_ini.setBackgroundColor(getResources().getColor(R.color.bt_bg_gris));
-        ruta_ini.setText(no_data);
-        medidor_ini.setText(no_data);
-        nombre_ini.setText(no_data);
-        codigo_ini.setText(no_data);
-        partida_ini.setText(no_data);
-        orden_ini.setText(no_data);
-        estAnt_ini.setText(no_data);
-    }
-
 
     private void logOut(){
         SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -418,7 +372,6 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
             if (perfilUsuario.equalsIgnoreCase("admin")) {
                 if (LogMedida.copiaBD()) {
                     dropTable();
-                    inicializaPanelLateral();
                     actualizarDatos();
                 }else{
                     Toast.makeText(getApplicationContext(),"Error al realizar el respaldo de la base...",Toast.LENGTH_SHORT).show();

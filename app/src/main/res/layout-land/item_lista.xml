@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/rlItem"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <TextView
+            android:id="@+id/itemRuta"
+            android:layout_width="@dimen/dim_ruta"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="Ruta"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_lista" />
+
+        <TextView
+            android:id="@+id/itemOrden"
+            android:layout_width="@dimen/dim_orden"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemRuta"
+            android:text="Orden"
+            android:textSize="@dimen/text_lista" />
+
+        <TextView
+            android:id="@+id/itemCodigo"
+            android:layout_width="@dimen/dim_codigo"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/itemOrden"
+            android:layout_alignBottom="@+id/itemOrden"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemOrden"
+            android:text="Código"
+            android:textAlignment="textStart"
+            android:textSize="@dimen/text_lista" />
+
+        <TextView
+            android:id="@+id/itemNombre"
+            android:layout_width="@dimen/dim_nombre"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/itemCodigo"
+            android:layout_alignBottom="@+id/itemCodigo"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemCodigo"
+            android:text="Mansilla Erbert Fabian Y Piccininn Maria"
+            android:textAlignment="textStart"
+            android:textSize="@dimen/text_lista" />
+
+        <TextView
+            android:id="@+id/itemMedidor"
+            android:layout_width="@dimen/dim_medidor"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/itemAnt"
+            android:layout_alignBottom="@+id/itemAnt"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemNombre"
+            android:text="20105205173"
+            android:textAlignment="textStart"
+            android:textSize="@dimen/text_lista" />
+
+        <TextView
+            android:id="@+id/itemPartida"
+            android:layout_width="@dimen/dim_partida"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/itemAnt"
+            android:layout_alignBottom="@+id/itemAnt"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemMedidor"
+            android:text="Partida"
+            android:textAlignment="textStart"
+            android:textSize="@dimen/text_lista" />
+
+
+        <TextView
+            android:id="@+id/itemAnt"
+            android:layout_width="@dimen/dim_estado"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemPartida"
+            android:text="Est. Anterior"
+            android:textAlignment="textStart"
+            android:textSize="@dimen/text_lista" />
+
+        <TextView
+            android:id="@+id/itemAct"
+            android:layout_width="@dimen/dim_estado"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/itemAnt"
+            android:text="Est. Actual"
+            android:textAlignment="textStart"
+            android:textSize="@dimen/text_lista" />
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

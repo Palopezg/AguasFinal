@@ -53,8 +53,8 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
                  partida = itemView.findViewById(R.id.itemPartida);
                  estAnt  = itemView.findViewById(R.id.itemAnt);
                  estAct  = itemView.findViewById(R.id.itemAct);
-                 estado = itemView.findViewById(R.id.tvActualizado);
-                statusIndicator = itemView.findViewById(R.id.cl_card_title);
+                 //estado = itemView.findViewById(R.id.tvActualizado);
+                //statusIndicator = itemView.findViewById(R.id.cl_card_title);
 
             }
         }
@@ -74,7 +74,7 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
         @Override
         public ExpenseViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View v = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.card_item, viewGroup, false);
+                    .inflate(R.layout.item_lista, viewGroup, false);
             return new ExpenseViewHolder(v);
         }
 
@@ -114,12 +114,12 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             viewHolder.partida.setText(partida);
             viewHolder.estAnt.setText(estAnt);
             viewHolder.estAct.setText(estAct);
-            viewHolder.estado.setText(actualizado);
+            //viewHolder.estado.setText(actualizado);
 
             String p = viewHolder.ruta.getText().toString();
             Log.i(TAG, "estado: "+estado+"   actualizado: "+actualizado);
 
-             if (actualizado != null) {
+/*             if (actualizado != null) {
                  if (actualizado.equalsIgnoreCase(Constantes.CARGADO)) {
                      viewHolder.statusIndicator.setBackgroundResource(R.color.bt_yellow);
                  }else {
@@ -129,7 +129,7 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
                  }
              }else{
                  viewHolder.statusIndicator.setBackgroundResource(R.color.bt_red);
-             }
+             }*/
 
 
 

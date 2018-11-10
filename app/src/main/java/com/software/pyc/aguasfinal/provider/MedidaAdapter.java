@@ -33,7 +33,7 @@ public class MedidaAdapter  extends ArrayAdapter<Medida> {
 
         // ¿Existe el view actual?
         //      if (null == convertView) {
-        View itemView = inflater.inflate(R.layout.card_item, null);
+        View itemView = inflater.inflate(R.layout.item_lista, null);
 
         //      }
 
