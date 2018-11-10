@@ -5,17 +5,23 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.software.pyc.aguasfinal.data.MedidaDBHelper;
 import com.software.pyc.aguasfinal.ui.ListaActivity;
 import com.software.pyc.aguasfinal.R;
+
+import java.net.Inet4Address;
 
 
 /**
@@ -25,7 +31,7 @@ import com.software.pyc.aguasfinal.R;
 public class CargaMedida extends DialogFragment  {
 
 
-    String estAnt, estAct, id;
+    String estAnt, estAct, id, med, comentario;
 
     // Interfaz de comunicación
     OnSimpleDialogListener listener;
@@ -34,6 +40,8 @@ public class CargaMedida extends DialogFragment  {
     public void Carga (Medida m){
         estAnt = m.getEstadoAnterior();
         estAct = m.getEstadoActual();
+        med = m.getMedidor();
+        comentario = m.getObservaciones();
         id = m.getId();
 
     }
@@ -73,11 +81,33 @@ public class CargaMedida extends DialogFragment  {
         final View v = inflater.inflate(R.layout.dialog_carga, null);
 
 
+
+
         builder.setView(v);
 
+        //Implementacion del spinner ruta
+        Spinner spinner = v.findViewById(R.id.sp_comentarios);
+        String[] comentarios_spinner = {"",
+                                        "Medidor Roto",
+                                        "No se puede acceder al medidor",
+                                        "Medidor no existe"};
+
+        spinner.setAdapter(new ArrayAdapter(getActivity().getApplicationContext(), R.layout.spinner_comentarios, comentarios_spinner));
+        spinner.setSelection(0);
+
+        for (int i = 0; i < comentarios_spinner.length; i++) {
+            if (comentarios_spinner[i].equalsIgnoreCase(comentario)){
+                spinner.setSelection(i);
+            }
+
+        }
+
+        final String comentario = spinner.getSelectedItem().toString();
         Button actualizar = (Button)v.findViewById(R.id.btnDialogCarga);
         final EditText estadoActual = (EditText)v.findViewById(R.id.etDialogEstAct);
-        TextView estadoAnterior = (TextView)v.findViewById(R.id.tvDialogEstAnt);
+        final TextView estadoAnterior = (TextView)v.findViewById(R.id.tvDialogEstAnt);
+        TextView medidor = (TextView)v.findViewById(R.id.tvDialogMedidor);
+
 
         // Cargo los valores existentes
         TextView ea = (TextView)v.findViewById(R.id.itemAct);
@@ -85,6 +115,7 @@ public class CargaMedida extends DialogFragment  {
 
         estadoActual.setText(estAct);
         estadoAnterior.setText(estAnt);
+        medidor.setText(med);
 
 
 
@@ -108,21 +139,65 @@ public class CargaMedida extends DialogFragment  {
                         if (estadoActual.getText().toString().equalsIgnoreCase("0")){
                             carga="FALSE";
                         }
-                        boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(),carga,usuarioSesion);
+
+                        Integer estAct;
+                        try {
+                             estAct = Integer.parseInt(estadoActual.getText().toString());
+                        }catch (Exception ex){
+                             estAct = 0;
+                             // carga="FALSE";
+                        }
+
+                        Integer estAnt = Integer.parseInt(estadoAnterior.getText().toString());
+
+                        if (estAct < estAnt){
+                            AlertDialog dialog =  createSimpleDialog("El valor actual, no puede ser menor al anterior.");
+                            dialog.show();
+
+                        }else {
+
+                            if (estAct > estAnt + 100 ){
+                                AlertDialog dialog =  createSimpleDialog("La medida actual supera por 100 a la anterior");
+                                dialog.show();
 
 
-                        Toast.makeText(getActivity(),"Valor nuevo: "+ valorEstadoActual,Toast.LENGTH_SHORT ).show();
+                            }
+                            boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(), comentario, carga, usuarioSesion);
+
+                            Toast.makeText(getActivity(), "Valor nuevo: " + valorEstadoActual, Toast.LENGTH_SHORT).show();
+
+                            listener.onPossitiveButtonClick();
+                            dismiss();
+                        }
 
 
-                        listener.onPossitiveButtonClick();
-
-                        dismiss();
                     }
                 }
         );
 
         return builder.create();
 
+    }
+
+    /**
+     * Crea un diálogo de alerta sencillo
+     * @return Nuevo diálogo
+     */
+    public AlertDialog createSimpleDialog(String mensaje) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("Advertencia")
+                .setMessage(mensaje)
+                .setPositiveButton("Aceptar",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+
+        return builder.create();
     }
 
 

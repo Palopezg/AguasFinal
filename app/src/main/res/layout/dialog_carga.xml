@@ -7,10 +7,11 @@
 
     <RelativeLayout
         android:layout_width="565dp"
-        android:layout_height="421dp"
+        android:layout_height="522dp"
         android:background="@drawable/borde_item_black"
         android:paddingHorizontal="?attr/dialogPreferredPadding"
         android:paddingVertical="?attr/dialogPreferredPadding"
+        android:windowSoftInputMode="adjustPan"
         tools:layout_editor_absoluteX="18dp"
         tools:layout_editor_absoluteY="80dp">
 
@@ -35,8 +36,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_above="@+id/etDialogEstAct"
-            android:layout_alignStart="@+id/etDialogEstAct"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tvDialogMedidor"
+            android:layout_marginTop="30dp"
             android:gravity="center"
             android:paddingBottom="@dimen/universal_margin"
             android:paddingTop="@dimen/universal_margin"
@@ -63,14 +65,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_above="@+id/btnDialogCarga"
-            android:layout_centerHorizontal="true"
+            android:layout_alignBaseline="@+id/tvDialogEstAnt"
+            android:layout_alignBottom="@+id/tvDialogEstAnt"
+            android:layout_marginStart="21dp"
+            android:layout_toEndOf="@+id/tvDialogEstAnt"
+            android:defaultFocusHighlightEnabled="true"
             android:ems="10"
+            android:focusable="auto"
+            android:focusedByDefault="false"
             android:gravity="center"
             android:hint="Ingrese nuevo estado"
             android:inputType="textPersonName|number"
             android:paddingBottom="@dimen/universal_margin"
-            android:paddingTop="@dimen/universal_margin" />
+            android:paddingTop="@dimen/universal_margin"
+            android:selectAllOnFocus="true"
+            tools:layout_editor_absoluteX="318dp"
+            tools:layout_editor_absoluteY="794dp" />
 
         <Button
             android:id="@+id/btnDialogCarga"
@@ -80,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="55dp"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/borde_item"
             android:gravity="center"
             android:paddingBottom="?attr/dialogPreferredPadding"
@@ -108,12 +118,22 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/textView4"
             android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView3"
+            android:layout_marginTop="30dp"
             android:paddingBottom="@dimen/universal_margin"
             android:paddingTop="@dimen/universal_margin"
             android:text="Medidor: "
             android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/sp_comentarios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btnDialogCarga"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="45dp"
+            android:entries="@array/Comentarios" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
 

@@ -40,6 +40,8 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" />
 
+
+
         <!-- SERVICIO DE AUTENTICACIÓN -->
         <service android:name=".sync.AuthenticationService">
             <intent-filter>

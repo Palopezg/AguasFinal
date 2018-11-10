@@ -31,7 +31,7 @@
         <RelativeLayout
             android:id="@+id/rlMedTitulos"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:background="@drawable/borde_titulos_lista"
             android:elevation="4dp">
 
@@ -44,7 +44,8 @@
                 android:layout_alignParentStart="true"
                 android:text="Ruta"
                 android:textAlignment="center"
-                android:textSize="@dimen/text_lista" />
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/lvOrden"
@@ -54,7 +55,8 @@
                 android:layout_marginStart="12dp"
                 android:layout_toEndOf="@+id/listRuta"
                 android:text="Orden"
-                android:textSize="@dimen/text_lista" />
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/lvCodigo"
@@ -66,7 +68,8 @@
                 android:layout_toEndOf="@+id/lvOrden"
                 android:text="Código"
                 android:textAlignment="textStart"
-                android:textSize="@dimen/text_lista" />
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/lvNombre"
@@ -78,7 +81,8 @@
                 android:layout_toEndOf="@+id/lvCodigo"
                 android:text="Nombre"
                 android:textAlignment="textStart"
-                android:textSize="@dimen/text_lista" />
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/lvMedidor"
@@ -90,7 +94,8 @@
                 android:layout_toEndOf="@+id/lvNombre"
                 android:text="Medidor"
                 android:textAlignment="textStart"
-                android:textSize="@dimen/text_lista" />
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/lvPartida"
@@ -102,7 +107,8 @@
                 android:layout_toEndOf="@+id/lvMedidor"
                 android:text="Partida"
                 android:textAlignment="textStart"
-                android:textSize="@dimen/text_lista" />
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
 
 
             <TextView
@@ -114,7 +120,8 @@
                 android:layout_toEndOf="@+id/lvPartida"
                 android:text="Est. Anterior"
                 android:textAlignment="textStart"
-                android:textSize="@dimen/text_lista" />
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/lvAct"
@@ -125,7 +132,8 @@
                 android:layout_toEndOf="@+id/lvAnt"
                 android:text="Est. Actual"
                 android:textAlignment="textStart"
-                android:textSize="@dimen/text_lista" />
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
 
 
         </RelativeLayout>

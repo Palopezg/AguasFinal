@@ -23,5 +23,12 @@
     <string name="action_settings">Settings</string>
     <string name="Usuarios">Agregar Usuarios</string>
 
+
     <!--Pantalla lista-->
+    <string-array name="Comentarios">
+        <item> </item>
+        <item>Medidor roto</item>
+        <item>Medidor no existe</item>
+        <item>No se puede acceder</item>
+    </string-array>
 </resources>
