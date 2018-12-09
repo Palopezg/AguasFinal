@@ -43,7 +43,7 @@
             android:paddingBottom="@dimen/universal_margin"
             android:paddingTop="@dimen/universal_margin"
             android:text="Estado Anterior: "
-            android:textSize="18sp" />
+            android:textSize="@dimen/text_lista" />
 
         <TextView
             android:id="@+id/tvDialogEstAnt"
@@ -57,7 +57,7 @@
             android:paddingBottom="@dimen/universal_margin"
             android:paddingTop="@dimen/universal_margin"
             android:text="55"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_lista"
             android:textStyle="bold" />
 
         <EditText
@@ -111,7 +111,7 @@
             android:paddingBottom="@dimen/universal_margin"
             android:paddingTop="@dimen/universal_margin"
             android:text="Medidor"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_lista"
             android:textStyle="bold" />
 
         <TextView
@@ -124,7 +124,7 @@
             android:paddingBottom="@dimen/universal_margin"
             android:paddingTop="@dimen/universal_margin"
             android:text="Medidor: "
-            android:textSize="18sp" />
+            android:textSize="@dimen/text_lista" />
 
         <Spinner
             android:id="@+id/sp_comentarios"

@@ -4,5 +4,5 @@
     android:layout_height="wrap_content"
     android:textAlignment="viewStart"
     android:textColor="@color/bt_black"
-    android:textSize="18sp"
+    android:textSize="25sp"
     android:textStyle="bold" />

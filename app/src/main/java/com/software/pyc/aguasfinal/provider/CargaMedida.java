@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +33,7 @@ public class CargaMedida extends DialogFragment  {
 
 
     String estAnt, estAct, id, med, comentario;
+    String carga="TRUE";
 
     // Interfaz de comunicación
     OnSimpleDialogListener listener;
@@ -103,7 +105,7 @@ public class CargaMedida extends DialogFragment  {
         }
 
         final String comentario = spinner.getSelectedItem().toString();
-        Button actualizar = (Button)v.findViewById(R.id.btnDialogCarga);
+        final Button actualizar = (Button)v.findViewById(R.id.btnDialogCarga);
         final EditText estadoActual = (EditText)v.findViewById(R.id.etDialogEstAct);
         final TextView estadoAnterior = (TextView)v.findViewById(R.id.tvDialogEstAnt);
         TextView medidor = (TextView)v.findViewById(R.id.tvDialogMedidor);
@@ -125,16 +127,16 @@ public class CargaMedida extends DialogFragment  {
                     @Override
                     public  void onClick(View v) {
 
-                        String carga="TRUE";
+
                         final SessionManager sessionManager = new SessionManager(getActivity().getApplicationContext());
                         final String usuarioSesion = sessionManager.getUser();
 
                         View viewItemMedida = inflater.inflate(R.layout.item_lista,null);
-                        String valorEstadoActual = String.valueOf(estadoActual.getText());
+                        final String valorEstadoActual = String.valueOf(estadoActual.getText());
 
 
                         // ACTUALIZAR EL DATO EN LA BASE POR EL ID
-                        MedidaDBHelper medidaOpenHelper = new MedidaDBHelper(getActivity().getApplicationContext(),ContractMedida.DATABASE_NAME,null,1);
+                        final MedidaDBHelper medidaOpenHelper = new MedidaDBHelper(getActivity().getApplicationContext(),ContractMedida.DATABASE_NAME,null,1);
 
                         if (estadoActual.getText().toString().equalsIgnoreCase("0")){
                             carga="FALSE";
@@ -153,21 +155,86 @@ public class CargaMedida extends DialogFragment  {
                         if (estAct < estAnt){
                             AlertDialog dialog =  createSimpleDialog("El valor actual, no puede ser menor al anterior.");
                             dialog.show();
+                            TextView textView = (TextView) dialog.findViewById(android.R.id.message);
+                            textView.setTextSize(28);
 
                         }else {
 
                             if (estAct > estAnt + 100 ){
-                                AlertDialog dialog =  createSimpleDialog("La medida actual supera por 100 a la anterior");
-                                dialog.show();
+/*                                AlertDialog dialog =  createSimpleDialog("La medida actual supera por 100 a la anterior");
+                                dialog.show();*/
+
+
+
+                                AlertDialog dialog2 = new AlertDialog.Builder(getContext())
+                                            .setTitle("La Medida nueva supera por 100 a la anteriod")
+                                            .setMessage("Confirma la nueva medida?")
+                                            .setPositiveButton("Confirmar",
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int idInt) {
+                                                            boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(), comentario, carga, usuarioSesion);
+
+                                                            Toast.makeText(getActivity(), "Valor nuevo: " + valorEstadoActual, Toast.LENGTH_SHORT).show();
+
+                                                            listener.onPossitiveButtonClick();
+                                                            dismiss();
+                                                        }
+                                                    })
+                                            .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    dialog.cancel();
+                                                }
+                                            }).show();
+                                TextView tvMessage = (TextView) dialog2.findViewById(android.R.id.message);
+                                tvMessage.setTextSize(25);
+                                TextView tvTitle = (TextView) dialog2.findViewById(android.R.id.title);
+                                if (tvTitle != null) {
+                                    tvTitle.setTextSize(28);
+                                }
+
+
+
+
+ /*                               AlertDialog.Builder dialogo1 = new AlertDialog.Builder(getContext());
+                                dialogo1.setTitle("La Medida nueva supera por 100 a la anteriod");
+                                dialogo1.setMessage("Confirma la nueva medida?");
+                                dialogo1.setCancelable(false);
+                                dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialogo1, int id) {
+                                        aceptar();
+                                    }
+                                    private void aceptar() {
+                                        boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(), comentario, carga, usuarioSesion);
+
+                                        Toast.makeText(getActivity(), "Valor nuevo: " + valorEstadoActual, Toast.LENGTH_SHORT).show();
+
+                                        listener.onPossitiveButtonClick();
+                                        dismiss();
+                                    }
+
+
+
+
+                                });
+                                dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialogo1, int id) {
+                                        cancelar();
+                                    }
+                                    public void cancelar() {
+                                        dismiss();
+                                    }
+                                });
+                                dialogo1.show();*/
+
 
 
                             }
-                            boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(), comentario, carga, usuarioSesion);
+/*                            boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(), comentario, carga, usuarioSesion);
 
                             Toast.makeText(getActivity(), "Valor nuevo: " + valorEstadoActual, Toast.LENGTH_SHORT).show();
 
                             listener.onPossitiveButtonClick();
-                            dismiss();
+                            dismiss();*/
                         }
 
 
@@ -178,6 +245,9 @@ public class CargaMedida extends DialogFragment  {
         return builder.create();
 
     }
+
+
+
 
     /**
      * Crea un diálogo de alerta sencillo
