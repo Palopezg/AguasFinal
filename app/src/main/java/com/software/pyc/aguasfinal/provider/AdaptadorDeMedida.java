@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.software.pyc.aguasfinal.R;
@@ -38,7 +39,8 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             public TextView estAct;
             public TextView actualizado;
             public TextView estado;
-            public View statusIndicator;
+            public TextView diff;
+            public ImageView statusIndicator;
 
             public ExpenseViewHolder(View v) {
                 super(v);
@@ -53,7 +55,8 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
                  partida = itemView.findViewById(R.id.itemPartida);
                  estAnt  = itemView.findViewById(R.id.itemAnt);
                  estAct  = itemView.findViewById(R.id.itemAct);
-                 //estado = itemView.findViewById(R.id.tvActualizado);
+                 diff    = itemView.findViewById(R.id.itemDiff);
+                 statusIndicator = itemView.findViewById(R.id.imStatus);
                 //statusIndicator = itemView.findViewById(R.id.cl_card_title);
 
             }
@@ -93,6 +96,7 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             String estAct;
             String estado;
             String actualizado;
+            int diferencia;
             //View statusIndicator = viewHolder.statusIndicator;
 
             ruta = cursor.getString(1);
@@ -106,6 +110,8 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             actualizado = cursor.getString(10);
             estado = cursor.getString(14);
 
+
+            diferencia= Integer.parseInt(estAct) - Integer.parseInt(estAnt);
             viewHolder.ruta.setText(ruta);
             viewHolder.orden.setText(orden);
             viewHolder.codigo.setText(codigo);
@@ -114,22 +120,26 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             viewHolder.partida.setText(partida);
             viewHolder.estAnt.setText(estAnt);
             viewHolder.estAct.setText(estAct);
+            viewHolder.diff.setText(String.valueOf(diferencia));
             //viewHolder.estado.setText(actualizado);
 
             String p = viewHolder.ruta.getText().toString();
             Log.i(TAG, "estado: "+estado+"   actualizado: "+actualizado);
 
-/*             if (actualizado != null) {
+             if (actualizado != null) {
                  if (actualizado.equalsIgnoreCase(Constantes.CARGADO)) {
-                     viewHolder.statusIndicator.setBackgroundResource(R.color.bt_yellow);
+                     viewHolder.statusIndicator.setImageResource(R.drawable.ic_sync_problem_black_24dp);
+                     //viewHolder.statusIndicator.setBackgroundResource(R.color.bt_yellow);
                  }else {
                      if (actualizado.equalsIgnoreCase(Constantes.SYCRONIZADO)) {
-                         viewHolder.statusIndicator.setBackgroundResource(R.color.bt_green);
+                         viewHolder.statusIndicator.setImageResource(R.drawable.ic_sync_black_24dp);
+//                         viewHolder.statusIndicator.setBackgroundResource(R.color.bt_green);
                      }
                  }
              }else{
-                 viewHolder.statusIndicator.setBackgroundResource(R.color.bt_red);
-             }*/
+                 viewHolder.statusIndicator.setImageResource(R.drawable.ic_sin_carga_on_black_24dp);
+//                 viewHolder.statusIndicator.setBackgroundResource(R.color.bt_red);
+             }
 
 
 

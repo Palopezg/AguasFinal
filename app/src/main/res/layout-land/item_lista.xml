@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -102,4 +103,27 @@
             android:textSize="@dimen/text_lista" />
 
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imStatus"
+        android:layout_width="@dimen/item_card_medium"
+        android:layout_height="@dimen/item_card_medium"
+        android:layout_alignBottom="@+id/itemMedidor"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/itemAct"
+        app:layout_constraintStart_toEndOf="@+id/itemDiff"
+        app:srcCompat="@drawable/ic_sin_carga_on_black_24dp" />
+
+    <TextView
+        android:id="@+id/itemDiff"
+        android:layout_width="@dimen/dim_diff"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@+id/itemAnt"
+        android:text="199"
+        android:textAlignment="textStart"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/rlItem"
+        tools:layout_editor_absoluteY="5dp" />
+
 </android.support.constraint.ConstraintLayout>

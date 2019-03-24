@@ -26,7 +26,7 @@
 
     <!--Pantalla lista-->
     <string-array name="Comentarios">
-        <item> </item>
+        <item>Sin Comentarios</item>
         <item>Medidor roto</item>
         <item>Medidor no existe</item>
         <item>No se puede acceder</item>

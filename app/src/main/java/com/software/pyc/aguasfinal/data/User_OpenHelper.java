@@ -72,13 +72,11 @@ public class User_OpenHelper extends SQLiteOpenHelper {
       return mcursor;
     }
 
-
-
     // Metodo que permite mostrar todos los usuaios
     public Cursor ConsultarUsuTodos() throws SQLException{
         Cursor mcursor;
         mcursor =  this.getReadableDatabase().query(
-                "usuarios",new String[]{"_ID, Nombre"},
+                "usuarios",new String[]{"_ID, Nombre, Password, Perfil"},
                 null,
                 null,
                 null,
@@ -97,11 +95,49 @@ public class User_OpenHelper extends SQLiteOpenHelper {
 
         if (c.moveToFirst()) {
             do {
-                listaUsuarios.add(new Usuario(c.getString(1),c.getString(0),c.getString(2)));
+                listaUsuarios.add(new Usuario(c.getInt(0),c.getString(1),c.getString(2),c.getString(3)));
             } while (c.moveToNext());
         }
 
         return listaUsuarios;
+    }
+
+    public long saveUsuario(Usuario usuario) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+
+        return sqLiteDatabase.insert(
+                "usuarios",
+                null,
+                usuario.toContentValues());
+
+    }
+
+    public Cursor getUsuarioById(Integer usuarioId) {
+        Cursor c = getReadableDatabase().query(
+                "usuarios",
+                null,
+                "_ID" + " LIKE ?",
+                new String[]{String.valueOf(usuarioId)},
+                null,
+                null,
+                null);
+        return c;
+    }
+
+    public int deleteUsuario(Integer usuarioId) {
+        return getWritableDatabase().delete(
+                "usuarios",
+                "_ID" + " LIKE ?",
+                new String[]{String.valueOf(usuarioId)});
+    }
+
+    public int updateLawyer(Usuario usuario, Integer usuarioId) {
+        return getWritableDatabase().update(
+                "usuarios",
+                usuario.toContentValues(),
+                "_ID" + " LIKE ?",
+                new String[]{String.valueOf(usuarioId)}
+        );
     }
 
     // Metodo que permite abrir la BD

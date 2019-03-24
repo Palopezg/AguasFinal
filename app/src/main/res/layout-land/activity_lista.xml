@@ -135,6 +135,19 @@
                 android:textSize="@dimen/text_lista"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/lvDif"
+                android:layout_width="@dimen/dim_diff"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/lvAct"
+                android:layout_alignBottom="@+id/lvAct"
+                android:layout_marginStart="14dp"
+                android:layout_toEndOf="@+id/lvAct"
+                android:text="DF"
+                android:textAlignment="textStart"
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
+
 
         </RelativeLayout>
 

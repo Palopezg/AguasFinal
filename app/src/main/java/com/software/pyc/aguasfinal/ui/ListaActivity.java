@@ -2,10 +2,12 @@ package com.software.pyc.aguasfinal.ui;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
@@ -17,9 +19,12 @@ import android.support.v7.widget.RecyclerView;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,12 +34,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.software.pyc.aguasfinal.R;
 import com.software.pyc.aguasfinal.provider.*;
 import com.software.pyc.aguasfinal.data.MedidaDBHelper;
 import com.software.pyc.aguasfinal.sync.SyncAdapter;
 import com.software.pyc.aguasfinal.utils.Constantes;
 import com.software.pyc.aguasfinal.utils.LogMedida;
+
 import java.util.List;
 
 public class ListaActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, CargaMedida.OnSimpleDialogListener {
@@ -55,41 +62,44 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
     ConsultaMedida consulta = ConsultaMedida.getInstance();
 
-    MedidaDBHelper medidaOpenHelper = new MedidaDBHelper(this,ContractMedida.DATABASE_NAME,null,1);
-    int posicionList =1;
-    int posElegido=-1;
-    Boolean flag=true;
+
+    MedidaDBHelper medidaOpenHelper = new MedidaDBHelper(this, ContractMedida.DATABASE_NAME, null, 1);
+    int posicionList = 1;
+    int posElegido = -1;
+    Boolean flag = true;
 
 
     public void onPossitiveButtonClick() {
         //medidaAdapter = new MedidaAdapter(getApplicationContext(), medidaOpenHelper.getListaMedidas(medidaOpenHelper.getAllMedidas(orderBy)));
-        Toast.makeText(getApplicationContext(),"OnClickListener" ,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "OnClickListener", Toast.LENGTH_SHORT).show();
         //medidaAdapter.notifyDataSetChanged();
         //listMedida = medidaOpenHelper.getListaMedidas(medidaOpenHelper.getAllMedidas());
         actualizarDatos();
 
     }
 
-    public void actualizarDatos(){
+    public void actualizarDatos() {
 
-        c = medidaOpenHelper.getAllMedidas(consulta.getOrderBy(),consulta.getWhere());
-        consulta.setFin(medidaOpenHelper.getCantAllMedidas(consulta.getOrderBy(),consulta.getWhere(),consulta.getLimite()));
+        c = medidaOpenHelper.getAllMedidas(consulta.getOrderBy(), consulta.getWhere());
+        consulta.setFin(medidaOpenHelper.getCantAllMedidas(consulta.getOrderBy(), consulta.getWhere(), consulta.getLimite()));
         adapter.swapCursor(c);
+        Log.i(TAG, "Consulta: "+ consulta.getWhere());
 
         if (flag) {
             recyclerView.setAdapter(adapter);
-            flag=false;
+            flag = false;
         }
 
 
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista);
+        final EditText etbusqueda = findViewById(R.id.etBusqueda2);
+
 
         progressDoalog = new ProgressDialog(ListaActivity.this);
 
@@ -103,7 +113,6 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
         TextView usu = findViewById(R.id.tvUser);
         usu.setText(sessionManager.getUser());
-
 
 
         recyclerView = findViewById(R.id.reciclador);
@@ -122,8 +131,9 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
 
         recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(this, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
+                new RecyclerItemClickListener(this, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
 
 
                         List<Medida> listaMedida = adapter.getLsMedida();
@@ -133,7 +143,7 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
                         CargaMedida d = new CargaMedida();
                         d.Carga(currentMedida);
-                        d.show(getFragmentManager(),"");
+                        d.show(getFragmentManager(), "");
 
 
 /*                        if (viewAnterior != null) {
@@ -148,12 +158,12 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
                     }
 
-                    @Override public void onLongItemClick(View view, int position) {
+                    @Override
+                    public void onLongItemClick(View view, int position) {
                         // do whatever
                     }
                 })
         );
-
 
 
         //Ordenamientos
@@ -168,107 +178,113 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         orderByOrden.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
                     consulta.setOrderByMetodo("asc");
-                }else{
+                } else {
                     consulta.setOrderByMetodo("desc");
-                };
+                }
+                ;
 
-                consulta.setOrderBy(ContractMedida.Columnas.ORDEN);
-                posicionList=0;
+                consulta.setOrderBy("CAST("+ContractMedida.Columnas.ORDEN+" AS INTEGER)");
+                posicionList = 0;
                 actualizarDatos();
             }
         });
         orderByCodigo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
                     consulta.setOrderByMetodo("asc");
-                }else{
+                } else {
                     consulta.setOrderByMetodo("desc");
-                };
+                }
+                ;
 
                 consulta.setOrderBy(ContractMedida.Columnas.CODIGO);
-                posicionList=0;
+                posicionList = 0;
                 actualizarDatos();
             }
         });
         orderByNombre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
                     consulta.setOrderByMetodo("asc");
-                }else{
+                } else {
                     consulta.setOrderByMetodo("desc");
-                };
+                }
+                ;
 
                 consulta.setOrderBy(ContractMedida.Columnas.NOMBRE);
-                posicionList=0;
+                posicionList = 0;
                 actualizarDatos();
             }
         });
         orderByMedidor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
                     consulta.setOrderByMetodo("asc");
-                }else{
+                } else {
                     consulta.setOrderByMetodo("desc");
-                };
+                }
+                ;
 
                 consulta.setOrderBy(ContractMedida.Columnas.MEDIDOR);
-                posicionList=0;
+                posicionList = 0;
                 actualizarDatos();
             }
         });
         orderByPartida.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
                     consulta.setOrderByMetodo("asc");
-                }else{
+                } else {
                     consulta.setOrderByMetodo("desc");
-                };
+                }
+                ;
 
                 consulta.setOrderBy(ContractMedida.Columnas.PARTIDA);
-                posicionList=0;
+                posicionList = 0;
                 actualizarDatos();
             }
         });
         orderByAnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
                     consulta.setOrderByMetodo("asc");
-                }else{
+                } else {
                     consulta.setOrderByMetodo("desc");
-                };
+                }
+                ;
 
-                consulta.setOrderBy(ContractMedida.Columnas.ESTADO_ANT);
-                posicionList=0;
+                consulta.setOrderBy("CAST("+ContractMedida.Columnas.ESTADO_ANT+" AS INTEGER)");
+                posicionList = 0;
                 actualizarDatos();
             }
         });
         orderByAct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
                     consulta.setOrderByMetodo("asc");
-                }else{
+                } else {
                     consulta.setOrderByMetodo("desc");
-                };
+                }
+                ;
 
-                consulta.setOrderBy(ContractMedida.Columnas.ESTADO_ACT);
-                posicionList=0;
+                consulta.setOrderBy("CAST("+ContractMedida.Columnas.ESTADO_ACT+" AS INTEGER)");
+                posicionList = 0;
                 actualizarDatos();
             }
         });
 
 
-
         //Implementacion del spinner ruta
         Spinner spinner = findViewById(R.id.spRuta);
-        String[] ruta_spinner = {"Todas","Ruta 1","Ruta 2","Ruta 3","Ruta 4"};
+        String[] ruta_spinner = {"Todas", "Ruta 1", "Ruta 2", "Ruta 3", "Ruta 4"};
 
         spinner.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_item, ruta_spinner));
         spinner.setSelection(1);
@@ -280,27 +296,27 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
             {
                 String ordenSel = String.valueOf(adapterView.getItemAtPosition(pos));
-                switch (ordenSel){
+                switch (ordenSel) {
                     case "Todas":
-                        ordenSel="*";
+                        ordenSel = "*";
                         break;
                     case "Ruta 1":
-                        ordenSel="1";
+                        ordenSel = "1";
                         break;
                     case "Ruta 2":
-                        ordenSel="2";
+                        ordenSel = "2";
                         break;
                     case "Ruta 3":
-                        ordenSel="3";
+                        ordenSel = "3";
                         break;
                     case "Ruta 4":
-                        ordenSel="4";
+                        ordenSel = "4";
                         break;
                 }
 
-                if (ordenSel.equalsIgnoreCase("*")){
+                if (ordenSel.equalsIgnoreCase("*")) {
                     rutaSeleccionada = "1=1";
-                }else {
+                } else {
                     rutaSeleccionada = ContractMedida.Columnas.RUTA + "=" + String.valueOf(ordenSel);
                 }
 
@@ -309,18 +325,55 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {    }
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
 
         //Implementacion del spinner busqueda
         ImageButton btnBusqueda = findViewById(R.id.btnBusqueda);
-        final EditText etbusqueda = findViewById(R.id.etBusqueda2);
+
+
+
+
+
+        etbusqueda.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //etbusqueda.performLongClick();
+
+                //Toast.makeText(getApplicationContext(), "click..........", Toast.LENGTH_SHORT).show();
+                etbusqueda.requestFocus();
+                etbusqueda.selectAll();
+            }
+        });
+
+        etbusqueda.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                etbusqueda.selectAll();
+                boolean procesado = false;
+
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    busqueda(etbusqueda);
+
+                    // Ocultar teclado virtual
+                    InputMethodManager imm =
+                            (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                    procesado = true;
+                }
+                return procesado;
+            }
+        });
 
         btnBusqueda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                busqueda(etbusqueda);
+/*                etbusqueda.selectAll();
                 String busquedaValor = etbusqueda.getText().toString();
 
 
@@ -333,7 +386,7 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
                 consulta.addWhereAnd(opcionBusqueda);
                 consulta.setOffset(1);
 
-                actualizarDatos();
+                actualizarDatos();*/
 
             }
         });
@@ -341,8 +394,33 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
     }
 
+    private void busqueda(EditText etbusqueda) {
+        etbusqueda.selectAll();
+        String busquedaValor = etbusqueda.getText().toString();
+        if (busquedaValor.equalsIgnoreCase("")){
+            opcionBusqueda = "1=1";
+            Log.i(TAG, opcionBusqueda);
+            consulta.addWhereAnd(opcionBusqueda);
 
-    private void logOut(){
+        }else{
+
+
+            opcionBusqueda = ContractMedida.Columnas.NOMBRE + " like '%" + busquedaValor + "%' or "
+                    + ContractMedida.Columnas.PARTIDA + " like '%" + busquedaValor + "%' or "
+                    + ContractMedida.Columnas.CODIGO + " like '%" + busquedaValor + "%' or "
+                    + ContractMedida.Columnas.MEDIDOR + " like '%" + busquedaValor + "%'";
+            Log.i(TAG, opcionBusqueda);
+            consulta.addWhereAnd(opcionBusqueda);
+            consulta.setOffset(1);
+        }
+
+
+
+        actualizarDatos();
+    }
+
+
+    private void logOut() {
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         sessionManager.logoutUser();
     }
@@ -352,9 +430,9 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
     public boolean onCreateOptionsMenu(Menu menu) {
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         final String perfilUsuario = sessionManager.getPerfil();
-        if (perfilUsuario.equalsIgnoreCase("admin")){
+        if (perfilUsuario.equalsIgnoreCase("admin")) {
             getMenuInflater().inflate(R.menu.menu_admin, menu);
-        }else {
+        } else {
             getMenuInflater().inflate(R.menu.menu_main, menu);
         }
 
@@ -373,20 +451,21 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
                 if (LogMedida.copiaBD()) {
                     dropTable();
                     actualizarDatos();
-                }else{
-                    Toast.makeText(getApplicationContext(),"Error al realizar el respaldo de la base...",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Error al realizar el respaldo de la base...", Toast.LENGTH_SHORT).show();
                 }
-            }else{
-                Toast.makeText(getApplicationContext(),"Solo el administrador puede borrar la tabla.",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Solo el administrador puede borrar la tabla.", Toast.LENGTH_SHORT).show();
             }
         }
         if (id == R.id.logout) {
             logOut();
         }
 
-        if (id == R.id.itemUsuarios) {
-            // agregar la llamada al activity para modificar/crear usuarios
-        }
+/*        if (id == R.id.itemUsuarios) {
+            Intent i = new Intent(getApplicationContext(),UsuariosActivity.class);
+            startActivity(i);
+        }*/
 
 
         if (id == R.id.action_sync) {
@@ -432,7 +511,6 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
                 progressDoalog.show();
 
 
-
                 return true;
             }
 
@@ -467,7 +545,7 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         if (progressDoalog.isShowing()) {
             progressDoalog.setProgress(progressDoalog.getMax());
             progressDoalog.dismiss();
-        }else {
+        } else {
             consulta.setFin(data.getCount());
         }
 
@@ -505,9 +583,17 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
 
-
-
+        // Compruebe si ninguna vista tiene el foco.
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 }
 
 

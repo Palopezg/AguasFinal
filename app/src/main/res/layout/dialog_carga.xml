@@ -120,7 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/textView3"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="60dp"
             android:paddingBottom="@dimen/universal_margin"
             android:paddingTop="@dimen/universal_margin"
             android:text="Medidor: "
@@ -133,7 +133,20 @@
             android:layout_above="@+id/btnDialogCarga"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="45dp"
-            android:entries="@array/Comentarios" />
+            android:entries="@array/Comentarios"
+            android:paddingStart="@dimen/margin_medium"
+            android:popupBackground="@drawable/borde_item" />
+
+        <TextView
+            android:id="@+id/tvDialogNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tvDialogMedidor"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="12dp"
+            android:text="Nombre"
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
 

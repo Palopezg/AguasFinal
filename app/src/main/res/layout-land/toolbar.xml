@@ -12,7 +12,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="700dp"
         android:layout_height="wrap_content">
 
         <TextView
@@ -25,6 +25,7 @@
             android:layout_marginTop="8dp"
             android:text="Usuario"
             android:textAppearance="@style/TextAppearance.Compat.Notification"
+            android:textSize="10sp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,18 +58,17 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:defaultFocusHighlightEnabled="false"
+            android:defaultFocusHighlightEnabled="true"
             android:ems="10"
-            android:focusable="auto"
-            android:focusedByDefault="false"
             android:hint="Busqueda"
+            android:imeOptions="actionSearch"
             android:inputType="textPersonName"
+            android:keyboardNavigationCluster="false"
+            android:onClick="@android:string/selectAll"
             android:selectAllOnFocus="true"
             android:textColor="@color/bt_white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/spRuta"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/spRuta" />
 
         <ImageButton
             android:id="@+id/btnBusqueda"
@@ -76,14 +76,14 @@
             android:layout_height="35dp"
             android:adjustViewBounds="true"
             android:background="@color/borde_item"
+            android:contentDescription="TODO"
             android:cropToPadding="false"
             android:elevation="0dp"
             android:tint="@color/bt_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/etBusqueda2"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_search"
-            android:contentDescription="TODO" />
+            app:srcCompat="@android:drawable/ic_menu_search" />
 
     </android.support.constraint.ConstraintLayout>
 

@@ -32,7 +32,7 @@ import java.net.Inet4Address;
 public class CargaMedida extends DialogFragment  {
 
 
-    String estAnt, estAct, id, med, comentario;
+    String estAnt, estAct, id, med, comentario, nombre;
     String carga="TRUE";
 
     // Interfaz de comunicación
@@ -42,6 +42,7 @@ public class CargaMedida extends DialogFragment  {
     public void Carga (Medida m){
         estAnt = m.getEstadoAnterior();
         estAct = m.getEstadoActual();
+        nombre = m.getNombre();
         med = m.getMedidor();
         comentario = m.getObservaciones();
         id = m.getId();
@@ -89,7 +90,7 @@ public class CargaMedida extends DialogFragment  {
 
         //Implementacion del spinner ruta
         Spinner spinner = v.findViewById(R.id.sp_comentarios);
-        String[] comentarios_spinner = {"",
+        String[] comentarios_spinner = {"Sin Comentarios",
                                         "Medidor Roto",
                                         "No se puede acceder al medidor",
                                         "Medidor no existe"};
@@ -108,6 +109,7 @@ public class CargaMedida extends DialogFragment  {
         final Button actualizar = (Button)v.findViewById(R.id.btnDialogCarga);
         final EditText estadoActual = (EditText)v.findViewById(R.id.etDialogEstAct);
         final TextView estadoAnterior = (TextView)v.findViewById(R.id.tvDialogEstAnt);
+        final TextView nombreDialog = (TextView)v.findViewById(R.id.tvDialogNombre);
         TextView medidor = (TextView)v.findViewById(R.id.tvDialogMedidor);
 
 
@@ -117,6 +119,7 @@ public class CargaMedida extends DialogFragment  {
 
         estadoActual.setText(estAct);
         estadoAnterior.setText(estAnt);
+        nombreDialog.setText(nombre);
         medidor.setText(med);
 
 
@@ -167,14 +170,14 @@ public class CargaMedida extends DialogFragment  {
 
 
                                 AlertDialog dialog2 = new AlertDialog.Builder(getContext())
-                                            .setTitle("La Medida nueva supera por 100 a la anteriod")
+                                            .setTitle("La Medida nueva supera por 100 a la anterior")
                                             .setMessage("Confirma la nueva medida?")
                                             .setPositiveButton("Confirmar",
                                                     new DialogInterface.OnClickListener() {
                                                         public void onClick(DialogInterface dialog, int idInt) {
                                                             boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(), comentario, carga, usuarioSesion);
 
-                                                            Toast.makeText(getActivity(), "Valor nuevo: " + valorEstadoActual, Toast.LENGTH_SHORT).show();
+//                                                            Toast.makeText(getActivity(), "Valor nuevo: " + valorEstadoActual, Toast.LENGTH_SHORT).show();
 
                                                             listener.onPossitiveButtonClick();
                                                             dismiss();
@@ -193,48 +196,14 @@ public class CargaMedida extends DialogFragment  {
                                 }
 
 
+                            }else {
+                                boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(), comentario, carga, usuarioSesion);
 
+//                            Toast.makeText(getActivity(), "Valor nuevo: " + valorEstadoActual, Toast.LENGTH_SHORT).show();
 
- /*                               AlertDialog.Builder dialogo1 = new AlertDialog.Builder(getContext());
-                                dialogo1.setTitle("La Medida nueva supera por 100 a la anteriod");
-                                dialogo1.setMessage("Confirma la nueva medida?");
-                                dialogo1.setCancelable(false);
-                                dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialogo1, int id) {
-                                        aceptar();
-                                    }
-                                    private void aceptar() {
-                                        boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(), comentario, carga, usuarioSesion);
-
-                                        Toast.makeText(getActivity(), "Valor nuevo: " + valorEstadoActual, Toast.LENGTH_SHORT).show();
-
-                                        listener.onPossitiveButtonClick();
-                                        dismiss();
-                                    }
-
-
-
-
-                                });
-                                dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialogo1, int id) {
-                                        cancelar();
-                                    }
-                                    public void cancelar() {
-                                        dismiss();
-                                    }
-                                });
-                                dialogo1.show();*/
-
-
-
+                                listener.onPossitiveButtonClick();
+                                dismiss();
                             }
-/*                            boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(), comentario, carga, usuarioSesion);
-
-                            Toast.makeText(getActivity(), "Valor nuevo: " + valorEstadoActual, Toast.LENGTH_SHORT).show();
-
-                            listener.onPossitiveButtonClick();
-                            dismiss();*/
                         }
 
 

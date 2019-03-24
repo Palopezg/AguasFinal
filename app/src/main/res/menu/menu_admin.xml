@@ -7,8 +7,8 @@
         android:orderInCategory="1" app:showAsAction="never" />
     <item android:id="@+id/logout" android:title="@string/logout"
         android:orderInCategory="1" app:showAsAction="never" />
-    <item android:id="@+id/itemUsuarios" android:title="@string/Usuarios"
-        android:orderInCategory="1" app:showAsAction="never" />
+<!--    <item android:id="@+id/itemUsuarios" android:title="@string/Usuarios"
+        android:orderInCategory="1" app:showAsAction="never" -->/>
     <item android:id="@+id/dropTable" android:title="@string/dropTable"
         android:orderInCategory="1" app:showAsAction="never" />
 
