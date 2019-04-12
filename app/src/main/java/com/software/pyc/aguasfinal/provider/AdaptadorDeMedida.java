@@ -96,6 +96,7 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             String estAct;
             String estado;
             String actualizado;
+            String diff;
             int diferencia;
             //View statusIndicator = viewHolder.statusIndicator;
 
@@ -112,6 +113,11 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
 
 
             diferencia= Integer.parseInt(estAct) - Integer.parseInt(estAnt);
+            if (diferencia < 0){
+                diff = String.valueOf('-');
+            }else{
+                diff = String.valueOf(diferencia);
+            }
             viewHolder.ruta.setText(ruta);
             viewHolder.orden.setText(orden);
             viewHolder.codigo.setText(codigo);
@@ -120,7 +126,7 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             viewHolder.partida.setText(partida);
             viewHolder.estAnt.setText(estAnt);
             viewHolder.estAct.setText(estAct);
-            viewHolder.diff.setText(String.valueOf(diferencia));
+            viewHolder.diff.setText(diff);
             //viewHolder.estado.setText(actualizado);
 
             String p = viewHolder.ruta.getText().toString();

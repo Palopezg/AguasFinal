@@ -9,10 +9,13 @@
         android:id="@+id/rlItem"
         android:layout_width="0dp"
         android:layout_height="52dp"
+        android:layout_marginEnd="8dp"
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/itemRuta"
@@ -102,28 +105,31 @@
             android:textAlignment="textStart"
             android:textSize="@dimen/text_lista" />
 
+
+        <ImageView
+            android:id="@+id/imStatus"
+            android:layout_width="@dimen/item_card_medium"
+            android:layout_height="@dimen/item_card_medium"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="14dp"
+            android:layout_toEndOf="@+id/itemDiff"
+            app:layout_constraintStart_toEndOf="@+id/itemDiff"
+            app:srcCompat="@drawable/ic_sin_carga_on_black_24dp"
+            tools:layout_editor_absoluteY="12dp" />
+
+        <TextView
+            android:id="@+id/itemDiff"
+            android:layout_width="@dimen/dim_diff"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/itemAct"
+            android:layout_alignBottom="@+id/itemAct"
+            android:layout_marginStart="11dp"
+            android:layout_toEndOf="@+id/itemAct"
+            android:text="199"
+            android:textAlignment="textStart"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/itemAct"
+            tools:layout_editor_absoluteY="5dp" />
     </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/imStatus"
-        android:layout_width="@dimen/item_card_medium"
-        android:layout_height="@dimen/item_card_medium"
-        android:layout_alignBottom="@+id/itemMedidor"
-        android:layout_marginStart="16dp"
-        android:layout_toEndOf="@+id/itemAct"
-        app:layout_constraintStart_toEndOf="@+id/itemDiff"
-        app:srcCompat="@drawable/ic_sin_carga_on_black_24dp" />
-
-    <TextView
-        android:id="@+id/itemDiff"
-        android:layout_width="@dimen/dim_diff"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@+id/itemAnt"
-        android:text="199"
-        android:textAlignment="textStart"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/rlItem"
-        tools:layout_editor_absoluteY="5dp" />
 
 </android.support.constraint.ConstraintLayout>
