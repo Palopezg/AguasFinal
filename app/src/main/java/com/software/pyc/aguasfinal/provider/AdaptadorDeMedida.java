@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.software.pyc.aguasfinal.R;
 import com.software.pyc.aguasfinal.sync.SyncAdapter;
 import com.software.pyc.aguasfinal.utils.Constantes;
+import com.software.pyc.aguasfinal.utils.LogMedida;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,13 +112,23 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             actualizado = cursor.getString(10);
             estado = cursor.getString(14);
 
-
-            diferencia= Integer.parseInt(estAct) - Integer.parseInt(estAnt);
+            diferencia = 0;
+            try
+            {
+          //      if ((estAct != null) && (!estAct.equals(""))){
+          //          if ((estAnt != null) &&  (!estAnt.equals("")))
+                        diferencia = Integer.parseInt(estAct) - Integer.parseInt(estAnt);
+          //      }
+            } catch (NumberFormatException nfe)
+            {
+                LogMedida.grabaLog(Constantes.LOG_BAJA_TABLA,"Basura en los datos de estados. Orden: "+orden,context);;
+            }
             if (diferencia < 0){
                 diff = String.valueOf('-');
             }else{
                 diff = String.valueOf(diferencia);
             }
+
             viewHolder.ruta.setText(ruta);
             viewHolder.orden.setText(orden);
             viewHolder.codigo.setText(codigo);
