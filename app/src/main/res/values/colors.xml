@@ -13,6 +13,9 @@
     <color name="bt_white">#ffffff</color>
     <color name="bt_black">#000000</color>
 
+    <color name="color_med_roto">#A1D32F2F</color>
+    <color name="color_med_ok">#00D32F2F</color>
+
     <color name="borde_item">@color/bt_blue</color>
 
 </resources>

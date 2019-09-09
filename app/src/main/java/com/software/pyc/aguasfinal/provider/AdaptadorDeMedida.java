@@ -4,6 +4,7 @@ package com.software.pyc.aguasfinal.provider;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,8 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             public TextView estado;
             public TextView diff;
             public ImageView statusIndicator;
+            public View rl;
+            public View cl;
 
             public ExpenseViewHolder(View v) {
                 super(v);
@@ -58,6 +61,8 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
                  estAct  = itemView.findViewById(R.id.itemAct);
                  diff    = itemView.findViewById(R.id.itemDiff);
                  statusIndicator = itemView.findViewById(R.id.imStatus);
+                 rl =  itemView.findViewById(R.id.rlItem);
+                 cl = itemView.findViewById(R.id.cl_item);
                 //statusIndicator = itemView.findViewById(R.id.cl_card_title);
 
             }
@@ -98,6 +103,7 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             String estado;
             String actualizado;
             String diff;
+            String comentario;
             int diferencia;
             //View statusIndicator = viewHolder.statusIndicator;
 
@@ -111,6 +117,29 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
             estAct = cursor.getString(8);
             actualizado = cursor.getString(10);
             estado = cursor.getString(14);
+            comentario = cursor.getString(12);
+
+            String[] comentarios_spinner = {"Medidor Roto",
+                                            "No se puede acceder al medidor",
+                                            "Medidor no existe",
+                                            "Otros"};
+
+            Boolean medidor_roto = Boolean.FALSE;
+
+            try {
+                String[] separated = comentario.split(" -- ");
+                if (separated[0] != null) {
+
+                    for (String c : comentarios_spinner) {
+                        if (c.equalsIgnoreCase(separated[0]))
+                            medidor_roto = Boolean.TRUE;
+                    }
+
+                }
+            }catch (Exception e){
+                medidor_roto = Boolean.FALSE;
+            }
+
 
             diferencia = 0;
             try
@@ -156,6 +185,13 @@ public class AdaptadorDeMedida extends RecyclerView.Adapter<AdaptadorDeMedida.Ex
              }else{
                  viewHolder.statusIndicator.setImageResource(R.drawable.ic_sin_carga_on_black_24dp);
 //                 viewHolder.statusIndicator.setBackgroundResource(R.color.bt_red);
+             }
+
+             if (medidor_roto){
+                 viewHolder.rl.setBackgroundResource(R.color.color_med_roto);
+//                 viewHolder.statusIndicator.setBackgroundResource(R.color.color_med_roto);
+             }else{
+                 viewHolder.rl.setBackgroundResource(R.color.color_med_ok);
              }
 
 

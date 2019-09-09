@@ -2,62 +2,37 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:layout_width="565dp"
-        android:layout_height="522dp"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
         android:background="@drawable/borde_item_black"
         android:paddingHorizontal="?attr/dialogPreferredPadding"
         android:paddingVertical="?attr/dialogPreferredPadding"
         android:windowSoftInputMode="adjustPan"
-        tools:layout_editor_absoluteX="18dp"
-        tools:layout_editor_absoluteY="80dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView3"
-            style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+        <Button
+            android:id="@+id/btnDialogCarga"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="match_parent"
+
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:background="@color/bt_blue"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/borde_item"
             android:gravity="center"
-            android:paddingBottom="@dimen/universal_margin"
-            android:paddingTop="@dimen/universal_margin"
-            android:text="Ingrese Nueva Carga"
-            android:textAlignment="center"
-            android:textColor="@color/bt_white"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/tvDialogMedidor"
-            android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:paddingBottom="@dimen/universal_margin"
-            android:paddingTop="@dimen/universal_margin"
-            android:text="Estado Anterior: "
-            android:textSize="@dimen/text_lista" />
-
-        <TextView
-            android:id="@+id/tvDialogEstAnt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignBaseline="@+id/textView4"
-            android:layout_alignBottom="@+id/textView4"
-            android:layout_toEndOf="@+id/textView4"
-            android:gravity="center"
-            android:paddingBottom="@dimen/universal_margin"
-            android:paddingTop="@dimen/universal_margin"
-            android:text="55"
-            android:textSize="@dimen/text_lista"
+            android:paddingTop="?attr/dialogPreferredPadding"
+            android:paddingBottom="?attr/dialogPreferredPadding"
+            android:text="Actualizar"
+            android:textColor="@color/bt_green"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <EditText
@@ -76,28 +51,79 @@
             android:gravity="center"
             android:hint="Ingrese nuevo estado"
             android:inputType="textPersonName|number"
-            android:paddingBottom="@dimen/universal_margin"
             android:paddingTop="@dimen/universal_margin"
+            android:paddingBottom="@dimen/universal_margin"
             android:selectAllOnFocus="true"
+            android:textSize="18sp"
             tools:layout_editor_absoluteX="318dp"
             tools:layout_editor_absoluteY="794dp" />
 
-        <Button
-            android:id="@+id/btnDialogCarga"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        <EditText
+            android:id="@+id/et_comentarios"
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/btnDialogCarga"
+            android:layout_below="@+id/sp_comentarios"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#B2DFDB"
+            android:ems="10"
+            android:hint="Comentarios..."
+            android:inputType="textPersonName" />
+
+        <Spinner
+            android:id="@+id/sp_comentarios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etDialogEstAct"
+            android:layout_marginTop="16dp"
+            android:entries="@array/Comentarios"
+            android:paddingStart="@dimen/margin_medium"
+            android:popupBackground="@drawable/borde_item" />
+
+        <TextView
+            android:id="@+id/textView3"
+            style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/borde_item"
+            android:layout_alignParentTop="true"
+            android:background="@color/bt_blue"
             android:gravity="center"
-            android:paddingBottom="?attr/dialogPreferredPadding"
-            android:paddingTop="?attr/dialogPreferredPadding"
-            android:text="Actualizar"
-            android:textColor="@color/bt_green"
-            android:textSize="24sp"
+            android:paddingTop="@dimen/universal_margin"
+            android:paddingBottom="@dimen/universal_margin"
+            android:text="Ingrese Nueva Carga"
+            android:textAlignment="center"
+            android:textColor="@color/bt_white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_below="@+id/tvDialogMedidor"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingTop="@dimen/universal_margin"
+            android:paddingBottom="@dimen/universal_margin"
+            android:text="Estado Anterior: "
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvDialogEstAnt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignBaseline="@+id/textView4"
+            android:layout_alignBottom="@+id/textView4"
+            android:layout_toEndOf="@+id/textView4"
+            android:gravity="center"
+            android:paddingTop="@dimen/universal_margin"
+            android:paddingBottom="@dimen/universal_margin"
+            android:text="55"
+            android:textSize="@dimen/text_lista"
             android:textStyle="bold" />
 
         <TextView
@@ -108,44 +134,35 @@
             android:layout_alignTop="@+id/textView5"
             android:layout_toEndOf="@+id/textView5"
             android:gravity="center"
-            android:paddingBottom="@dimen/universal_margin"
             android:paddingTop="@dimen/universal_margin"
+            android:paddingBottom="@dimen/universal_margin"
             android:text="Medidor"
-            android:textSize="@dimen/text_lista"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/textView3"
-            android:layout_marginTop="60dp"
-            android:paddingBottom="@dimen/universal_margin"
-            android:paddingTop="@dimen/universal_margin"
-            android:text="Medidor: "
-            android:textSize="@dimen/text_lista" />
-
-        <Spinner
-            android:id="@+id/sp_comentarios"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/btnDialogCarga"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="45dp"
-            android:entries="@array/Comentarios"
-            android:paddingStart="@dimen/margin_medium"
-            android:popupBackground="@drawable/borde_item" />
+            android:layout_marginTop="60dp"
+            android:paddingTop="@dimen/universal_margin"
+            android:paddingBottom="@dimen/universal_margin"
+            android:text="Medidor: "
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvDialogNombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/tvDialogMedidor"
+            android:layout_below="@+id/textView3"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="16dp"
             android:text="Nombre"
-            android:textSize="20sp"
+            android:textSize="14sp"
             android:textStyle="bold" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

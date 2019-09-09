@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -16,6 +17,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imStatus"
+            android:layout_width="@dimen/item_card_medium"
+            android:layout_height="@dimen/item_card_medium"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="14dp"
+            android:layout_toEndOf="@+id/itemDiff"
+            app:layout_constraintStart_toEndOf="@+id/itemDiff"
+            app:srcCompat="@drawable/ic_sin_carga_on_black_24dp"
+            tools:layout_editor_absoluteY="12dp" />
 
         <TextView
             android:id="@+id/itemRuta"
@@ -72,6 +84,7 @@
             android:textAlignment="textStart"
             android:textSize="@dimen/text_lista" />
 
+
         <TextView
             android:id="@+id/itemPartida"
             android:layout_width="@dimen/dim_partida"
@@ -84,7 +97,6 @@
             android:textAlignment="textStart"
             android:textSize="@dimen/text_lista" />
 
-
         <TextView
             android:id="@+id/itemAnt"
             android:layout_width="@dimen/dim_estado"
@@ -95,6 +107,7 @@
             android:textAlignment="textStart"
             android:textSize="@dimen/text_lista" />
 
+
         <TextView
             android:id="@+id/itemAct"
             android:layout_width="@dimen/dim_estado"
@@ -104,18 +117,6 @@
             android:text="Est. Actual"
             android:textAlignment="textStart"
             android:textSize="@dimen/text_lista" />
-
-
-        <ImageView
-            android:id="@+id/imStatus"
-            android:layout_width="@dimen/item_card_medium"
-            android:layout_height="@dimen/item_card_medium"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="14dp"
-            android:layout_toEndOf="@+id/itemDiff"
-            app:layout_constraintStart_toEndOf="@+id/itemDiff"
-            app:srcCompat="@drawable/ic_sin_carga_on_black_24dp"
-            tools:layout_editor_absoluteY="12dp" />
 
         <TextView
             android:id="@+id/itemDiff"

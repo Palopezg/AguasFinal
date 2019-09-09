@@ -89,11 +89,12 @@ public class CargaMedida extends DialogFragment  {
         builder.setView(v);
 
         //Implementacion del spinner ruta
-        Spinner spinner = v.findViewById(R.id.sp_comentarios);
-        String[] comentarios_spinner = {"Sin Comentarios",
+        final Spinner spinner = v.findViewById(R.id.sp_comentarios);
+        String[] comentarios_spinner = {"Medidior OK",
                                         "Medidor Roto",
                                         "No se puede acceder al medidor",
-                                        "Medidor no existe"};
+                                        "Medidor no existe",
+                                        "Otros"};
 
         spinner.setAdapter(new ArrayAdapter(getActivity().getApplicationContext(), R.layout.spinner_comentarios, comentarios_spinner));
         spinner.setSelection(0);
@@ -105,11 +106,16 @@ public class CargaMedida extends DialogFragment  {
 
         }
 
-        final String comentario = spinner.getSelectedItem().toString();
+        final String sp_comentario = spinner.getSelectedItem().toString();
         final Button actualizar = (Button)v.findViewById(R.id.btnDialogCarga);
         final EditText estadoActual = (EditText)v.findViewById(R.id.etDialogEstAct);
         final TextView estadoAnterior = (TextView)v.findViewById(R.id.tvDialogEstAnt);
         final TextView nombreDialog = (TextView)v.findViewById(R.id.tvDialogNombre);
+        final TextView et_comentarios = (TextView)v.findViewById(R.id.et_comentarios);
+
+        final String  comentario_total = sp_comentario + " -- " + et_comentarios.getText();
+
+
         TextView medidor = (TextView)v.findViewById(R.id.tvDialogMedidor);
 
 
@@ -124,6 +130,28 @@ public class CargaMedida extends DialogFragment  {
 
 
 
+        try {
+            String[] separated = comentario.split(" -- ");
+            if (separated[0] != null) {
+
+                for (int i=0;i<spinner.getCount();i++){
+                    if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(separated[0])){
+                        spinner.setSelection(i);
+                    }
+                }
+
+//                spinner.setSelection(((ArrayAdapter<String>)spinner.getAdapter()).getPosition(separated[0]));
+            }
+            if (separated[1] != null) {
+                et_comentarios.setText(separated[1]);
+            }
+        }catch (Exception e){
+            et_comentarios.setText("");;
+        }
+
+
+
+
 
         actualizar.setOnClickListener(
                 new View.OnClickListener() {
@@ -133,6 +161,10 @@ public class CargaMedida extends DialogFragment  {
 
                         final SessionManager sessionManager = new SessionManager(getActivity().getApplicationContext());
                         final String usuarioSesion = sessionManager.getUser();
+                        final String sp_comentario = spinner.getSelectedItem().toString();
+
+                        final String  comentario_total = sp_comentario + " -- " + et_comentarios.getText();
+
 
                         View viewItemMedida = inflater.inflate(R.layout.item_lista,null);
                         final String valorEstadoActual = String.valueOf(estadoActual.getText());
@@ -155,7 +187,7 @@ public class CargaMedida extends DialogFragment  {
 
                         Integer estAnt = Integer.parseInt(estadoAnterior.getText().toString());
 
-                        if (estAct < estAnt){
+                        if ((estAct < estAnt) && (sp_comentario.equalsIgnoreCase("Medidior OK"))){
                             AlertDialog dialog =  createSimpleDialog("El valor actual, no puede ser menor al anterior.");
                             dialog.show();
                             TextView textView = (TextView) dialog.findViewById(android.R.id.message);
@@ -175,7 +207,7 @@ public class CargaMedida extends DialogFragment  {
                                             .setPositiveButton("Confirmar",
                                                     new DialogInterface.OnClickListener() {
                                                         public void onClick(DialogInterface dialog, int idInt) {
-                                                            boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(), comentario, carga, usuarioSesion);
+                                                            boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(), comentario_total, carga, usuarioSesion);
 
 //                                                            Toast.makeText(getActivity(), "Valor nuevo: " + valorEstadoActual, Toast.LENGTH_SHORT).show();
 
@@ -197,7 +229,8 @@ public class CargaMedida extends DialogFragment  {
 
 
                             }else {
-                                boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(), comentario, carga, usuarioSesion);
+
+                                boolean controlCarga = medidaOpenHelper.cargaEstado(id, estadoActual.getText().toString(), comentario_total, carga, usuarioSesion);
 
 //                            Toast.makeText(getActivity(), "Valor nuevo: " + valorEstadoActual, Toast.LENGTH_SHORT).show();
 
