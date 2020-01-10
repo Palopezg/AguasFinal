@@ -14,13 +14,16 @@ public class Constantes {
     /**
      * Dirección IP de genymotion o AVD
      */
-    private static final String IP = "http://aguassync.000webhostapp.com";
+//    private static final String IP = "http://aguassync.000webhostapp.com";
+    private static final String IP = "https://aguasdlv.site";
+
 
     /**
      * URLs del Web Service
      */
-    public static final String GET_URL = IP + PUERTO_HOST + "/web/obtener_medida.php";
-    public static final String UPDATE_URL = IP + PUERTO_HOST + "/web/update_medida.php";
+
+    public static final String GET_URL = IP +  "/wsdl_update_tablets/web/obtener_medida.php";
+    public static final String UPDATE_URL = IP + "/wsdl_update_tablets/web/update_medida.php";
 
     /**
      * Campos de las respuestas Json
