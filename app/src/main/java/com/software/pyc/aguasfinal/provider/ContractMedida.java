@@ -83,6 +83,7 @@ public class ContractMedida {
         public final static String FECHA_ACT = "fecha_act";
         public final static String ACTUALIZADO = "actualizado";
         public final static String USUARIO = "usuario";
+        public final static String OBSERVACIONES = "observaciones";
 
         // Columnas para la sincronizacion
 

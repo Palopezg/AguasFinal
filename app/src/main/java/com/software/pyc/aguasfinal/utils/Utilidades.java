@@ -5,8 +5,6 @@ import android.database.Cursor;
 import android.os.Build;
 import android.util.Log;
 
-import com.software.pyc.aguasfinal.provider.ContractMedida;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +22,8 @@ public class Utilidades {
     public static final int COLUMNA_FECHA_ACT= 9;
     public static final int COLUMNA_USUARIO = 10;
     public static final int COLUMNA_ID_REMOTA = 11;
+    public static final int COLUMNA_OBSERVACIONES = 12;
+    public static final int COLUMNA_ACTUALIZADO = 13;
 
 
     /**
@@ -37,7 +37,7 @@ public class Utilidades {
     }
 
     /**
-     * Copia los datos de un gasto almacenados en un cursor hacia un
+     * Copia los datos de una medida almacenados en un cursor hacia un
      * JSONObject
      *
      * @param c cursor
@@ -50,18 +50,21 @@ public class Utilidades {
         String fecha_act;
         String usuario;
         String idRemota;
+        String observaciones;
 
         estado_act = c.getString(COLUMNA_ESTADO_ACT);
         fecha_act = c.getString(COLUMNA_FECHA_ACT);
         usuario = c.getString(COLUMNA_USUARIO);
         idRemota = c.getString(COLUMNA_ID_REMOTA);
+        observaciones = c.getString(COLUMNA_OBSERVACIONES);
 
         try {
 
             jObject.put(Constantes.ESTADO_ACT, estado_act);
-             jObject.put(Constantes.FECHA_ACT, fecha_act);
+            jObject.put(Constantes.FECHA_ACT, fecha_act);
             jObject.put(Constantes.USUARIO, usuario);
             jObject.put(Constantes.ID_MEDIDA, idRemota);
+            jObject.put(Constantes.OBSERVACIONES, observaciones);
         } catch (JSONException e) {
             e.printStackTrace();
         }

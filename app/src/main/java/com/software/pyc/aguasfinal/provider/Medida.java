@@ -5,14 +5,25 @@ import android.content.ContentValues;
 
 /**
  * Created by pablo on 15/7/2018.
+ * Clase Medida se instancia con los datos de la BD
+ * -----No esta completamente alineada a la BD
  */
 
 public class Medida {
-    private String id, ruta, orden, codigo, medidor, estadoAnterior, estadoActual;
+    private final String observaciones;
+    private String id, ruta, orden, codigo, medidor, estadoAnterior, estadoActual, idRemota;
     private String usuario;
     private String nombre, partida;
     private String fechaActualizacion;
     private String actualizado;
+
+    public String getIdRemota() {
+        return idRemota;
+    }
+
+    public void setIdRemota(String idRemota) {
+        this.idRemota = idRemota;
+    }
 
     public String getId() {
         return id;
@@ -94,6 +105,10 @@ public class Medida {
         this.partida = partida;
     }
 
+    public String getObservaciones() {
+        return observaciones;
+    }
+
     public String getFechaActualizacion() {
         return fechaActualizacion;
     }
@@ -110,7 +125,7 @@ public class Medida {
         this.actualizado = actualizado;
     }
 
-    public Medida(String id, String ruta, String orden, String codigo, String nombre, String medidor,  String partida,  String estadoAnterior, String estadoActual,  String fechaActualizacion, String actualizado, String usuario) {
+    public Medida(String id, String ruta, String orden, String codigo, String nombre, String medidor,  String partida,  String estadoAnterior, String estadoActual, String fechaActualizacion, String actualizado, String usuario, String observaciones, String idRemota) {
         this.id = id;
         this.ruta = ruta;
         this.orden = orden;
@@ -121,8 +136,10 @@ public class Medida {
         this.usuario = usuario;
         this.nombre = nombre;
         this.partida = partida;
+        this.observaciones = observaciones;
         this.fechaActualizacion = fechaActualizacion;
         this.actualizado = actualizado;
+        this.idRemota = idRemota;
     }
 
 
@@ -141,6 +158,7 @@ public class Medida {
         values.put(ContractMedida.Columnas.ESTADO_ACT,estadoActual );
         values.put(ContractMedida.Columnas.FECHA_ACT,fechaActualizacion );
         values.put(ContractMedida.Columnas.ACTUALIZADO,actualizado );
+        values.put(ContractMedida.Columnas.OBSERVACIONES,observaciones );
         values.put(ContractMedida.Columnas.USUARIO,usuario );
 
         return values;

@@ -21,9 +21,11 @@ public class Medida {
     public String estadoActual;
     public String fechaActualizacion;
     public String usuario;
+    public String observaciones;
+    public String actualizado;
 
 
-    public Medida(String idMedida, String ruta, String orden, String codigo, String nombre, String medidor, String partida, String estadoAnterior, String estadoActual, String fechaActualizacion, String usuario) {
+    public Medida(String idMedida, String ruta, String orden, String codigo, String nombre, String medidor, String partida, String estadoAnterior, String estadoActual, String fechaActualizacion, String usuario, String observaciones, String actualizado) {
         this.idMedida = idMedida;
         this.ruta = ruta;
         this.orden = orden;
@@ -35,5 +37,7 @@ public class Medida {
         this.estadoActual = estadoActual;
         this.fechaActualizacion = fechaActualizacion;
         this.usuario = usuario;
+        this.observaciones = observaciones;
+        this.actualizado = actualizado;
     }
 }

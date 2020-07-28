@@ -2,9 +2,12 @@ package com.software.pyc.aguasfinal.ui;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
@@ -16,78 +19,87 @@ import android.support.v7.widget.RecyclerView;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.software.pyc.aguasfinal.R;
-
 import com.software.pyc.aguasfinal.provider.*;
 import com.software.pyc.aguasfinal.data.MedidaDBHelper;
 import com.software.pyc.aguasfinal.sync.SyncAdapter;
+import com.software.pyc.aguasfinal.utils.Constantes;
+import com.software.pyc.aguasfinal.utils.LogMedida;
 
 import java.util.List;
 
-public class ListaActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ListaActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, CargaMedida.OnSimpleDialogListener {
 
     private static final String TAG = ListaActivity.class.getSimpleName();
 
-
-    static MedidaAdapter medidaAdapter;
-    static Cursor c;
-    static String rutaSeleccionada;
-    static String opcionBusqueda;
-    static String opcionBusquedaAux;
-    static int posAnterior=1;
-    static View viewAnterior = null;
-    static Medida currentMedida = null;
+    Cursor c;
+    String rutaSeleccionada;
+    String opcionBusqueda;
+    View viewAnterior = null;
+    Medida currentMedida = null;
     Toolbar toolbar;
-
-    static Boolean firstTime = false;
-
+    Boolean firstTime = false;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private AdaptadorDeMedida adapter;
     ProgressDialog progressDoalog;
 
-
     ConsultaMedida consulta = ConsultaMedida.getInstance();
 
-    MedidaDBHelper medidaOpenHelper = new MedidaDBHelper(this,ContractMedida.DATABASE_NAME,null,1);
-    static int posicionList =1;
-    static int paddinList=0;
-    static int posElegido=-1;
-    Boolean flag=true;
+
+    MedidaDBHelper medidaOpenHelper = new MedidaDBHelper(this, ContractMedida.DATABASE_NAME, null, 1);
+    int posicionList = 1;
+    int posElegido = -1;
+    Boolean flag = true;
 
 
-
-    public void actualizarDatos(){
-
-        c = medidaOpenHelper.getAllMedidas(consulta.getOrderBy(),consulta.getWhere());
-        consulta.setFin(medidaOpenHelper.getCantAllMedidas(consulta.getOrderBy(),consulta.getWhere(),consulta.getLimite()));
-        adapter.swapCursor(c);
-
-        if (flag) {
-            recyclerView.setAdapter(adapter);
-            flag=false;
-        }
+    public void onPossitiveButtonClick() {
+        //medidaAdapter = new MedidaAdapter(getApplicationContext(), medidaOpenHelper.getListaMedidas(medidaOpenHelper.getAllMedidas(orderBy)));
+        //Toast.makeText(getApplicationContext(), "OnClickListener", Toast.LENGTH_SHORT).show();
+        //medidaAdapter.notifyDataSetChanged();
+        //listMedida = medidaOpenHelper.getListaMedidas(medidaOpenHelper.getAllMedidas());
+        actualizarDatos();
 
     }
 
+    public void actualizarDatos() {
+
+        c = medidaOpenHelper.getAllMedidas(consulta.getOrderBy(), consulta.getWhere());
+        consulta.setFin(medidaOpenHelper.getCantAllMedidas(consulta.getOrderBy(), consulta.getWhere(), consulta.getLimite()));
+        adapter.swapCursor(c);
+        Log.i(TAG, "Consulta: "+ consulta.getWhere());
+
+        if (flag) {
+            recyclerView.setAdapter(adapter);
+            flag = false;
+        }
+
+
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista);
+        final EditText etbusqueda = findViewById(R.id.etBusqueda2);
+
 
         progressDoalog = new ProgressDialog(ListaActivity.this);
 
@@ -96,150 +108,186 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         setSupportActionBar(toolbar);
 
 
+        final SessionManager sessionManager = new SessionManager(getApplicationContext());
+        final String usuarioSesion = sessionManager.getUser();
+
+        TextView usu = findViewById(R.id.tvUser);
+        usu.setText(sessionManager.getUser());
+
 
         recyclerView = findViewById(R.id.reciclador);
-        //recyclerView.setHasFixedSize(true);
-
-        recyclerView.setItemViewCacheSize(1000);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(15);
         recyclerView.setDrawingCacheEnabled(true);
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new AdaptadorDeMedida(this);
+        adapter.hasStableIds();
+
 
         recyclerView.setAdapter(adapter);
         getSupportLoaderManager().initLoader(0, null, this);
 
-        Button btnCargaMedida = findViewById(R.id.btnPLAceptar);
-
-
-
-        btnCargaMedida.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText etCargaMedida = findViewById(R.id.etIngresarMedida);
-
-                if (currentMedida == null) {
-                    Toast.makeText(getApplicationContext(), "Seleccione un item...", Toast.LENGTH_SHORT).show();
-                }else {
-                    if (etCargaMedida.getText().toString().trim().equalsIgnoreCase("")) {
-                        Toast.makeText(getApplicationContext(), "Ingrese un valor nuevo...", Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        boolean controlCarga = medidaOpenHelper.cargaEstado(currentMedida.getId(), etCargaMedida.getText().toString(), "TRUE");
-                        etCargaMedida.setText(null);
-                        posicionList = layoutManager.findFirstVisibleItemPosition();
-
-                        actualizarDatos();
-
-                    }
-                }
-            }
-        });
-
-
 
         recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(this, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
+                new RecyclerItemClickListener(this, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
 
-                        ConstraintLayout rl =  findViewById(R.id.rlItem);
 
                         List<Medida> listaMedida = adapter.getLsMedida();
-
                         currentMedida = listaMedida.get(position);
+
                         posElegido = position;
 
+                        CargaMedida d = new CargaMedida();
+                        d.Carga(currentMedida);
+                        d.show(getFragmentManager(), "");
 
-                        if (viewAnterior != null) {
-                            viewAnterior.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.borde_item));
+
+/*                        if (viewAnterior != null) {
+                            viewAnterior.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.borde_item_black));
                             viewAnterior.setElevation(0);
                         }
                         viewAnterior = view;
 
                         view.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.borde_item));
-                        view.setElevation(8);
-
-                        EditText panelEstAct = findViewById(R.id.etIngresarMedida);
-                        panelEstAct.setText(currentMedida.getEstadoActual());
+                        view.setElevation(8);*/
 
 
                     }
 
-                    @Override public void onLongItemClick(View view, int position) {
+                    @Override
+                    public void onLongItemClick(View view, int position) {
                         // do whatever
                     }
                 })
         );
 
 
+        //Ordenamientos
+        TextView orderByOrden = findViewById(R.id.lvOrden);
+        TextView orderByCodigo = findViewById(R.id.lvCodigo);
+        TextView orderByNombre = findViewById(R.id.lvNombre);
+        TextView orderByMedidor = findViewById(R.id.lvMedidor);
+        TextView orderByPartida = findViewById(R.id.lvPartida);
+        TextView orderByAnt = findViewById(R.id.lvAnt);
+        TextView orderByAct = findViewById(R.id.lvAct);
 
-        //Implementacion del spinner buscar
-        Spinner spinnerOrderBy =  findViewById(R.id.spOrderBy);
-
-        String[] order_spinner = {"Ordenar por Nombre","Ordenar por Partida","Ordenar por Medidor"};
-
-        spinnerOrderBy.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, order_spinner));
-
-        spinnerOrderBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
+        orderByOrden.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id)
-
-            {
-
-                String ordenSeleccionada = String.valueOf(adapterView.getItemAtPosition(pos));
-
-                switch (ordenSeleccionada){
-                    case "Ordenar por Nombre":
-                        if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
-                            consulta.setOrderByMetodo("asc");
-                        }else{
-                            consulta.setOrderByMetodo("desc");
-                        }
-
-                        consulta.setOrderBy(ContractMedida.Columnas.NOMBRE);
-                        posicionList=1;
-                        actualizarDatos();
-                        break;
-                    case "Ordenar por Partida":
-                        if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
-                            consulta.setOrderByMetodo("asc");
-                        }else{
-                            consulta.setOrderByMetodo("desc");
-                        }
-
-                        consulta.setOrderBy(ContractMedida.Columnas.ORDEN);
-                        posicionList=1;
-                        actualizarDatos();
-                        break;
-                    case "Ordenar por Medidor":
-                        if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")){
-                            consulta.setOrderByMetodo("asc");
-                        }else{
-                            consulta.setOrderByMetodo("desc");
-                        }
-
-                        consulta.setOrderBy(ContractMedida.Columnas.MEDIDOR);
-                        posicionList=1;
-                        actualizarDatos();
-                        break;
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
+                    consulta.setOrderByMetodo("asc");
+                } else {
+                    consulta.setOrderByMetodo("desc");
                 }
+                ;
 
-
-
+                consulta.setOrderBy("CAST("+ContractMedida.Columnas.ORDEN+" AS INTEGER)");
+                posicionList = 0;
+                actualizarDatos();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {    }
         });
+        orderByCodigo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
+                    consulta.setOrderByMetodo("asc");
+                } else {
+                    consulta.setOrderByMetodo("desc");
+                }
+                ;
+
+                consulta.setOrderBy(ContractMedida.Columnas.CODIGO);
+                posicionList = 0;
+                actualizarDatos();
+            }
+        });
+        orderByNombre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
+                    consulta.setOrderByMetodo("asc");
+                } else {
+                    consulta.setOrderByMetodo("desc");
+                }
+                ;
+
+                consulta.setOrderBy(ContractMedida.Columnas.NOMBRE);
+                posicionList = 0;
+                actualizarDatos();
+            }
+        });
+        orderByMedidor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
+                    consulta.setOrderByMetodo("asc");
+                } else {
+                    consulta.setOrderByMetodo("desc");
+                }
+                ;
+
+                consulta.setOrderBy(ContractMedida.Columnas.MEDIDOR);
+                posicionList = 0;
+                actualizarDatos();
+            }
+        });
+        orderByPartida.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
+                    consulta.setOrderByMetodo("asc");
+                } else {
+                    consulta.setOrderByMetodo("desc");
+                }
+                ;
+
+                consulta.setOrderBy(ContractMedida.Columnas.PARTIDA);
+                posicionList = 0;
+                actualizarDatos();
+            }
+        });
+        orderByAnt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
+                    consulta.setOrderByMetodo("asc");
+                } else {
+                    consulta.setOrderByMetodo("desc");
+                }
+                ;
+
+                consulta.setOrderBy("CAST("+ContractMedida.Columnas.ESTADO_ANT+" AS INTEGER)");
+                posicionList = 0;
+                actualizarDatos();
+            }
+        });
+        orderByAct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (consulta.getOrderByMetodo().equalsIgnoreCase("desc")) {
+                    consulta.setOrderByMetodo("asc");
+                } else {
+                    consulta.setOrderByMetodo("desc");
+                }
+                ;
+
+                consulta.setOrderBy("CAST("+ContractMedida.Columnas.ESTADO_ACT+" AS INTEGER)");
+                posicionList = 0;
+                actualizarDatos();
+            }
+        });
+
 
         //Implementacion del spinner ruta
         Spinner spinner = findViewById(R.id.spRuta);
-        String[] ruta_spinner = {"1","2","3","4"};
+        String[] ruta_spinner = {"Todas", "Ruta 1", "Ruta 2", "Ruta 3", "Ruta 4"};
 
-        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ruta_spinner));
+        spinner.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_item, ruta_spinner));
+        spinner.setSelection(1);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -247,90 +295,132 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id)
 
             {
-                rutaSeleccionada = ContractMedida.Columnas.RUTA+"="+String.valueOf(adapterView.getItemAtPosition(pos));
+                String ordenSel = String.valueOf(adapterView.getItemAtPosition(pos));
+                switch (ordenSel) {
+                    case "Todas":
+                        ordenSel = "*";
+                        break;
+                    case "Ruta 1":
+                        ordenSel = "1";
+                        break;
+                    case "Ruta 2":
+                        ordenSel = "2";
+                        break;
+                    case "Ruta 3":
+                        ordenSel = "3";
+                        break;
+                    case "Ruta 4":
+                        ordenSel = "4";
+                        break;
+                }
+
+                if (ordenSel.equalsIgnoreCase("*")) {
+                    rutaSeleccionada = "1=1";
+                } else {
+                    rutaSeleccionada = ContractMedida.Columnas.RUTA + "=" + String.valueOf(ordenSel);
+                }
 
                 consulta.setRuta(rutaSeleccionada);
                 actualizarDatos();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {    }
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
 
         //Implementacion del spinner busqueda
         ImageButton btnBusqueda = findViewById(R.id.btnBusqueda);
-        Spinner spinnerBusqueda =  findViewById(R.id.spBusqueda);
-        final EditText etbusqueda = findViewById(R.id.etBusqueda2);
 
-        String[] busqueda_spinner = {"Nombre","Partida","Medidor"};
 
-        spinnerBusqueda.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, busqueda_spinner));
 
-        spinnerBusqueda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+        etbusqueda.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id)
+            public void onClick(View v) {
+                //etbusqueda.performLongClick();
 
-            {
-
-                String busquedaSeleccionada = String.valueOf(adapterView.getItemAtPosition(pos));
-
-                switch (busquedaSeleccionada){
-                    case "Nombre":
-                        busquedaSeleccionada = ContractMedida.Columnas.NOMBRE;
-                        break;
-                    case "Partida":
-                        busquedaSeleccionada = ContractMedida.Columnas.PARTIDA;
-                        break;
-                    case "Medidor":
-                        busquedaSeleccionada = ContractMedida.Columnas.MEDIDOR;
-                        break;
-                }
-
-                opcionBusquedaAux=busquedaSeleccionada;
-
+                //Toast.makeText(getApplicationContext(), "click..........", Toast.LENGTH_SHORT).show();
+                etbusqueda.requestFocus();
+                etbusqueda.selectAll();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {    }
         });
 
+        etbusqueda.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                etbusqueda.selectAll();
+                boolean procesado = false;
+
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    busqueda(etbusqueda);
+
+                    // Ocultar teclado virtual
+                    InputMethodManager imm =
+                            (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                    procesado = true;
+                }
+                return procesado;
+            }
+        });
 
         btnBusqueda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                busqueda(etbusqueda);
+/*                etbusqueda.selectAll();
                 String busquedaValor = etbusqueda.getText().toString();
 
-                opcionBusqueda=opcionBusquedaAux+" like '%"+busquedaValor+"%'";
+
+                opcionBusqueda= ContractMedida.Columnas.NOMBRE+" like '%"+busquedaValor+"%' or "
+                              +ContractMedida.Columnas.PARTIDA+" like '%"+busquedaValor+"%' or "
+                              +ContractMedida.Columnas.CODIGO+" like '%"+busquedaValor+"%' or "
+                              +ContractMedida.Columnas.MEDIDOR+" like '%"+busquedaValor+"%'";
+
+                Log.i(TAG, opcionBusqueda);
                 consulta.addWhereAnd(opcionBusqueda);
                 consulta.setOffset(1);
 
-                actualizarDatos();
+                actualizarDatos();*/
 
             }
         });
 
 
+    }
 
-        recyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position = recyclerView.getChildLayoutPosition(v);
-                Medida currentMedida = medidaAdapter.getItem(position);
+    private void busqueda(EditText etbusqueda) {
+        etbusqueda.selectAll();
+        String busquedaValor = etbusqueda.getText().toString();
+        if (busquedaValor.equalsIgnoreCase("")){
+            opcionBusqueda = "1=1";
+            Log.i(TAG, opcionBusqueda);
+            consulta.addWhereAnd(opcionBusqueda);
 
-                CargaMedida d = new CargaMedida();
-                d.Carga(currentMedida);
-                d.show(getFragmentManager(),"");
+        }else{
 
-            }
-        });
+
+            opcionBusqueda = ContractMedida.Columnas.NOMBRE + " like '%" + busquedaValor + "%' or "
+                    + ContractMedida.Columnas.PARTIDA + " like '%" + busquedaValor + "%' or "
+                    + ContractMedida.Columnas.CODIGO + " like '%" + busquedaValor + "%' or "
+                    + ContractMedida.Columnas.MEDIDOR + " like '%" + busquedaValor + "%'";
+            Log.i(TAG, opcionBusqueda);
+            consulta.addWhereAnd(opcionBusqueda);
+            consulta.setOffset(1);
+        }
+
+
+
+        actualizarDatos();
     }
 
 
-    private void logOut(){
+    private void logOut() {
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         sessionManager.logoutUser();
     }
@@ -338,23 +428,52 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
     //  Instanciacion del menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        final String perfilUsuario = sessionManager.getPerfil();
+        if (perfilUsuario.equalsIgnoreCase("admin")) {
+            getMenuInflater().inflate(R.menu.menu_admin, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+        }
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        final String perfilUsuario = sessionManager.getPerfil();
+
+
+        if (id == R.id.dropTable) {
+            if (perfilUsuario.equalsIgnoreCase("admin")) {
+                if (LogMedida.copiaBD()) {
+                    dropTable();
+                    actualizarDatos();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Error al realizar el respaldo de la base...", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Solo el administrador puede borrar la tabla.", Toast.LENGTH_SHORT).show();
+            }
+        }
         if (id == R.id.logout) {
             logOut();
         }
+
+/*        if (id == R.id.itemUsuarios) {
+            Intent i = new Intent(getApplicationContext(),UsuariosActivity.class);
+            startActivity(i);
+        }*/
+
 
         if (id == R.id.action_sync) {
             if (!compruebaConexion(this)) {
                 Toast.makeText(getBaseContext(), "Necesaria conexión a internet ", Toast.LENGTH_SHORT).show();
             } else {
-                medidaOpenHelper.onDelete();
-                Log.i(TAG, "medida borrada.");
+//                medidaOpenHelper.onDelete();
+//                Log.i(TAG, "medida borrada.");
 
                 SyncAdapter.sincronizarAhora(this, false);
 
@@ -400,11 +519,16 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         return super.onOptionsItemSelected(item);
     }
 
+    private void dropTable() {
+
+        medidaOpenHelper.dropTable();
+    }
 
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        Log.i(TAG, "onCreateLoader...");
         // Consultar todos los registros
         return new CursorLoader(
                 this,
@@ -421,7 +545,7 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
         if (progressDoalog.isShowing()) {
             progressDoalog.setProgress(progressDoalog.getMax());
             progressDoalog.dismiss();
-        }else {
+        } else {
             consulta.setFin(data.getCount());
         }
 
@@ -431,13 +555,8 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
         actualizarDatos();
+        Log.i(TAG, "onLoadReset...");
     }
-
-    /**
-     * Función para comprobar si hay conexión a Internet
-     * @param context
-     * @return boolean
-     */
 
     public static boolean compruebaConexion(Context context) {
 
@@ -447,16 +566,34 @@ public class ListaActivity extends AppCompatActivity implements LoaderManager.Lo
 
         // Recupera todas las redes (tanto móviles como wifi)
         NetworkInfo[] redes = connec.getAllNetworkInfo();
+        if (redes != null) {
 
-        for (int i = 0; i < redes.length; i++) {
-            // Si alguna red tiene conexión, se devuelve true
-            if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
-                connected = true;
+            for (NetworkInfo rede : redes) {
+                // Si alguna red tiene conexión, se devuelve true
+                if (rede.getState() == NetworkInfo.State.CONNECTED) {
+                    connected = true;
+                }
             }
         }
         return connected;
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        // Compruebe si ninguna vista tiene el foco.
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 }
 
 

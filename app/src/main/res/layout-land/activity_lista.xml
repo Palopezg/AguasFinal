@@ -13,43 +13,159 @@
         layout="@layout/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <include
-        android:id="@+id/include2"
-        layout="@layout/panel_lateral"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/reciclador"
-        app:layout_constraintHeight_default="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarPrincipal"
-        app:layout_constraintWidth_default="spread" />
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/reciclador"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
-        android:foregroundGravity="center_horizontal"
-        android:padding="3dp"
-        android:scrollbars="vertical"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/include2"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarPrincipal"
-        app:layout_constraintWidth_default="spread" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarPrincipal">
+
+        <RelativeLayout
+            android:id="@+id/rlMedTitulos"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/borde_titulos_lista"
+            android:elevation="4dp">
+
+            <TextView
+                android:id="@+id/listRuta"
+                android:layout_width="@dimen/dim_ruta"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/lvOrden"
+                android:layout_alignBottom="@+id/lvOrden"
+                android:layout_alignParentStart="true"
+                android:text="Ruta"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/lvOrden"
+                android:layout_width="@dimen/dim_orden"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/listRuta"
+                android:text="Orden"
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/lvCodigo"
+                android:layout_width="@dimen/dim_codigo"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/lvOrden"
+                android:layout_alignBottom="@+id/lvOrden"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/lvOrden"
+                android:text="Código"
+                android:textAlignment="textStart"
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/lvNombre"
+                android:layout_width="@dimen/dim_nombre"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/lvCodigo"
+                android:layout_alignBottom="@+id/lvCodigo"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/lvCodigo"
+                android:text="Nombre"
+                android:textAlignment="textStart"
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/lvMedidor"
+                android:layout_width="@dimen/dim_medidor"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/lvAnt"
+                android:layout_alignBottom="@+id/lvAnt"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/lvNombre"
+                android:text="Medidor"
+                android:textAlignment="textStart"
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/lvPartida"
+                android:layout_width="@dimen/dim_partida"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/lvAnt"
+                android:layout_alignBottom="@+id/lvAnt"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/lvMedidor"
+                android:text="Partida"
+                android:textAlignment="textStart"
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/lvAnt"
+                android:layout_width="@dimen/dim_estado"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/lvPartida"
+                android:text="Est. Anterior"
+                android:textAlignment="textStart"
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/lvAct"
+                android:layout_width="@dimen/dim_estado"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/lvAnt"
+                android:text="Est. Actual"
+                android:textAlignment="textStart"
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/lvDif"
+                android:layout_width="@dimen/dim_diff"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/lvAct"
+                android:layout_alignBottom="@+id/lvAct"
+                android:layout_marginStart="14dp"
+                android:layout_toEndOf="@+id/lvAct"
+                android:text="DF"
+                android:textAlignment="textStart"
+                android:textSize="@dimen/text_lista"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/reciclador"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foregroundGravity="center_horizontal"
+            android:padding="3dp"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarPrincipal"
+            app:layout_constraintWidth_default="spread" />
+    </LinearLayout>
+
+
 
 
 </android.support.constraint.ConstraintLayout>

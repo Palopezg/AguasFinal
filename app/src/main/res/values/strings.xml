@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Aguas Ventanas</string>
+    <string name="app_name">Aguas Ventana</string>
 
     <!--Provider y account-->
     <string name="account_type">com.software.pyc.aguasfinal.account</string>
@@ -17,9 +17,18 @@
 
     <!--Menu-->
     <string name="logout">Logout</string>
+    <string name="dropTable">Borrar Tabla</string>
     <string name="action_sync">Bajar tabla</string>
     <string name="action_sync_local">Subir Actualizaciones</string>
     <string name="action_settings">Settings</string>
+    <string name="Usuarios">Agregar Usuarios</string>
+
 
     <!--Pantalla lista-->
+    <string-array name="Comentarios">
+        <item>Sin Comentarios</item>
+        <item>Medidor roto</item>
+        <item>Medidor no existe</item>
+        <item>No se puede acceder</item>
+    </string-array>
 </resources>
